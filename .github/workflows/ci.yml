@@ -125,6 +125,29 @@ jobs:
         env:
           NODE_ENV: production
 
+      - name: Download test results
+        uses: actions/download-artifact@v4
+        with:
+          name: playwright-report
+          path: dist/test-results/
+          if-no-files-found: ignore
+
+      - name: Create test results index
+        if: always()
+        run: |
+          if [ -d "dist/test-results" ] && [ "$(ls -A dist/test-results)" ]; then
+            echo "Test results found, creating index page"
+            mkdir -p dist/test-results
+            # Copy the index.html from playwright-report if it exists
+            if [ -f "dist/test-results/index.html" ]; then
+              echo "Test results index.html already exists"
+            else
+              echo "<!DOCTYPE html><html><head><title>Test Results</title><meta http-equiv='refresh' content='0; url=./index.html'></head><body><p>Redirecting to test results...</p></body></html>" > dist/test-results/index.html
+            fi
+          else
+            echo "No test results to deploy"
+          fi
+
       - name: Setup Pages
         uses: actions/configure-pages@v4
 
