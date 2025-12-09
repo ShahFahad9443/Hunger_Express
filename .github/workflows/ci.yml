@@ -147,50 +147,48 @@ jobs:
             # Ensure index.html exists
             if [ ! -f "dist/test-results/index.html" ]; then
               echo "Creating fallback index.html"
-              cat > dist/test-results/index.html << 'EOF'
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Test Results - Hunger Express</title>
-  <style>
-    body { font-family: Arial, sans-serif; padding: 20px; }
-    .error { color: #d32f2f; }
-  </style>
-</head>
-<body>
-  <h1>Test Results</h1>
-  <p class="error">No test results available. Tests may not have run or completed successfully.</p>
-  <p>Check the GitHub Actions workflow for test execution details.</p>
-</body>
-</html>
-EOF
+              printf '%s\n' \
+                '<!DOCTYPE html>' \
+                '<html>' \
+                '<head>' \
+                '  <title>Test Results - Hunger Express</title>' \
+                '  <style>' \
+                '    body { font-family: Arial, sans-serif; padding: 20px; }' \
+                '    .error { color: #d32f2f; }' \
+                '  </style>' \
+                '</head>' \
+                '<body>' \
+                '  <h1>Test Results</h1>' \
+                '  <p class="error">No test results available. Tests may not have run or completed successfully.</p>' \
+                '  <p>Check the GitHub Actions workflow for test execution details.</p>' \
+                '</body>' \
+                '</html>' > dist/test-results/index.html
             fi
           else
             echo "No test results artifact found, creating placeholder"
             mkdir -p dist/test-results
-            cat > dist/test-results/index.html << 'EOF'
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Test Results - Hunger Express</title>
-  <style>
-    body { font-family: Arial, sans-serif; padding: 20px; }
-    .info { color: #1976d2; }
-  </style>
-</head>
-<body>
-  <h1>Test Results</h1>
-  <p class="info">Test results are not available for this deployment.</p>
-  <p>This may happen if:</p>
-  <ul>
-    <li>Tests haven't run yet</li>
-    <li>Tests failed before generating a report</li>
-    <li>Test results artifact was not created</li>
-  </ul>
-  <p>Check the GitHub Actions workflow logs for more information.</p>
-</body>
-</html>
-EOF
+            printf '%s\n' \
+              '<!DOCTYPE html>' \
+              '<html>' \
+              '<head>' \
+              '  <title>Test Results - Hunger Express</title>' \
+              '  <style>' \
+              '    body { font-family: Arial, sans-serif; padding: 20px; }' \
+              '    .info { color: #1976d2; }' \
+              '  </style>' \
+              '</head>' \
+              '<body>' \
+              '  <h1>Test Results</h1>' \
+              '  <p class="info">Test results are not available for this deployment.</p>' \
+              '  <p>This may happen if:</p>' \
+              '  <ul>' \
+              '    <li>Tests haven'\''t run yet</li>' \
+              '    <li>Tests failed before generating a report</li>' \
+              '    <li>Test results artifact was not created</li>' \
+              '  </ul>' \
+              '  <p>Check the GitHub Actions workflow logs for more information.</p>' \
+              '</body>' \
+              '</html>' > dist/test-results/index.html
           fi
 
       - name: Setup Pages
