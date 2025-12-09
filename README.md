@@ -92,6 +92,7 @@ Hunger_Express/
 ### Development Tools
 - **Husky** - Git hooks for pre-commit linting
 - **Nodemon** - Auto-restart server during development
+- **Playwright** - End-to-end testing framework
 
 ## 📝 Available Scripts
 
@@ -105,6 +106,23 @@ Hunger_Express/
 - `npm run server` - Start backend server (production mode)
 - `npm run server:dev` - Start backend server with nodemon (development mode)
 - `npm run dev:all` - Start both frontend and backend concurrently (requires `concurrently` package)
+
+### Testing
+- `npm run test` - Run Playwright tests
+- `npm run test:ui` - Run Playwright tests with UI mode
+- `npm run test:headed` - Run Playwright tests in headed mode (visible browser)
+
+## 🧪 Test Results
+
+View the latest Playwright test results online:
+
+🔗 **[View Test Results](https://shahfahad9443.github.io/Hunger_Express/test-results/)**
+
+The test results are automatically deployed with each GitHub Pages deployment and include:
+- Test execution summary
+- Pass/fail status for each test
+- Detailed test reports
+- Screenshots and videos (on failure)
 
 ## 🔧 Backend Setup
 
