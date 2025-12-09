@@ -156,6 +156,19 @@ This project uses Husky to run Git hooks automatically:
 
 The hooks are automatically set up when you run `npm install` (via the `prepare` script).
 
+## 📋 Pull Request Template
+
+This project uses a PR template to ensure consistent and comprehensive pull requests. When creating a PR on GitHub, the template will automatically populate with sections for:
+
+- Description of changes
+- Type of change (bug fix, feature, etc.)
+- Related issues
+- Testing information
+- Checklist for reviewers
+- Additional notes
+
+The template file is located at `.github/pull_request_template.md`. Simply fill out the template when creating your PR to provide reviewers with all necessary information.
+
 ## 🎯 Path Aliases
 
 The project uses path aliases configured in `jsconfig.json`:
