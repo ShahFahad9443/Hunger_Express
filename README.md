@@ -89,6 +89,10 @@ Hunger_Express/
 - **CORS** - Cross-origin resource sharing
 - **dotenv** - Environment variable management
 
+### Development Tools
+- **Husky** - Git hooks for pre-commit linting
+- **Nodemon** - Auto-restart server during development
+
 ## 📝 Available Scripts
 
 ### Frontend
@@ -140,6 +144,17 @@ The backend uses ES6 modules and includes:
 - MongoDB connection with Mongoose
 - Error handling middleware
 - Structured folder organization (controllers, models, routes)
+
+## 🔒 Git Hooks (Husky)
+
+This project uses Husky to run Git hooks automatically:
+
+- **Pre-commit hook**: Runs ESLint before each commit
+  - Prevents commits with linting errors
+  - Ensures code quality standards are maintained
+  - To bypass (not recommended): `git commit --no-verify`
+
+The hooks are automatically set up when you run `npm install` (via the `prepare` script).
 
 ## 🎯 Path Aliases
 
