@@ -19,6 +19,17 @@ test.describe('Hunger Express Homepage', () => {
     const description = page.getByText(/AI based Food Ordering and Delivery Web Application/i);
     await expect(description).toBeVisible();
   });
+  test('should display welcome message 2', async ({ page }) => {
+    await page.goto('/');
+    
+    // Check for the main heading
+    const heading = page.getByRole('heading', { name: /Welcome to Hunger Express/i });
+    await expect(heading).toBeVisible();
+    
+    // Check for the description
+    const description = page.getByText(/AI based Food Ordering and Delivery Web Application/i);
+    await expect(description).toBeVisible();
+  });
 
   test('should have proper page structure', async ({ page }) => {
     await page.goto('/');
