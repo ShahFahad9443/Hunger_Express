@@ -5,8 +5,7 @@ const Home = () => {
       <p>Hunger Express - Food Ordering & Delivery</p>
 
       <p>
-        A very intelligent food ordering and delivery system that uses AI to
-        help you order food faster and easier
+        Lets do something amazing together.
       </p>
     </div>
   );
