@@ -8,7 +8,7 @@ const Home = () => {
         A very intelligent food ordering and delivery system that uses AI to
         help you order food faster and easier
       </p>
-      <h1 className="text-5xl text-red-500 font-bold">TAILWIND WORKING</h1>
+      
     </div>
   );
 };
