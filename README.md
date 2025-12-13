@@ -205,14 +205,27 @@ This project includes Slack notifications for CI/CD pipeline failures. When any 
 
 ### Notification Details
 
-The Slack notification includes:
+The Slack integration sends notifications for two events:
+
+#### 1. CI Pipeline Failures
+Triggered when any CI job fails (Lint, Build, Test, or Deploy). Includes:
 - Repository name and branch
 - Workflow name
 - Actor (who triggered the workflow)
-- List of failed jobs (Lint, Build, Test, or Deploy)
+- List of failed jobs
 - Direct link to view the workflow run in GitHub Actions
 
-**Note:** Notifications are only sent on push and pull request events, and only when jobs fail.
+#### 2. PR Merge Success
+Triggered when a pull request is successfully merged. Includes:
+- Repository name
+- PR number and title
+- PR author
+- Source and target branches
+- Direct link to the merged PR
+
+**Note:** 
+- CI failure notifications are only sent on push and pull request events, and only when jobs fail
+- PR merge notifications are sent automatically when a PR is merged to any branch
 
 ## 📋 Pull Request Template
 
