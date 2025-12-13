@@ -5,7 +5,7 @@ test.describe('Hunger Express Homepage', () => {
     await page.goto('/');
     
     // Check if the page title is correct
-    await expect(page).toHaveTitle(/Hunger Express - Food Ordering & Delivery abc/i);
+    await expect(page).toHaveTitle(/Hunger Express - Food Ordering & Delivery/i);
   });
 });
 
