@@ -45,6 +45,96 @@ const Offers = () => {
         </div>
       </div>
 
+      {/* Available Promo Codes Section */}
+      <div className="bg-white rounded-lg shadow-md p-8 mb-8">
+        <h2 className="text-3xl font-bold text-pink-600 mb-6 text-center">Available Promo Codes</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="border-2 border-pink-200 rounded-lg p-6 hover:border-pink-400 transition">
+            <div className="flex items-start justify-between mb-4">
+              <div>
+                <h3 className="text-2xl font-bold text-pink-600 mb-2">FIRST30</h3>
+                <p className="text-3xl font-bold text-gray-800 mb-2">30% OFF</p>
+              </div>
+              <span className="material-symbols-outlined text-pink-600 text-4xl">local_offer</span>
+            </div>
+            <p className="text-gray-600 mb-2">
+              Get 30% off on your first order!
+            </p>
+            <p className="text-sm text-gray-500">
+              <span className="font-semibold">Minimum order:</span> $20
+            </p>
+            <div className="mt-4 p-3 bg-pink-50 rounded-lg">
+              <p className="text-sm text-pink-700 font-semibold">
+                Use code: <span className="text-lg font-bold">FIRST30</span>
+              </p>
+            </div>
+          </div>
+
+          <div className="border-2 border-yellow-200 rounded-lg p-6 hover:border-yellow-400 transition">
+            <div className="flex items-start justify-between mb-4">
+              <div>
+                <h3 className="text-2xl font-bold text-yellow-600 mb-2">WEEKEND20</h3>
+                <p className="text-3xl font-bold text-gray-800 mb-2">20% OFF</p>
+              </div>
+              <span className="material-symbols-outlined text-yellow-600 text-4xl">local_offer</span>
+            </div>
+            <p className="text-gray-600 mb-2">
+              Perfect for weekend orders!
+            </p>
+            <p className="text-sm text-gray-500">
+              <span className="font-semibold">Minimum order:</span> No minimum
+            </p>
+            <div className="mt-4 p-3 bg-yellow-50 rounded-lg">
+              <p className="text-sm text-yellow-700 font-semibold">
+                Use code: <span className="text-lg font-bold">WEEKEND20</span>
+              </p>
+            </div>
+          </div>
+
+          <div className="border-2 border-green-200 rounded-lg p-6 hover:border-green-400 transition">
+            <div className="flex items-start justify-between mb-4">
+              <div>
+                <h3 className="text-2xl font-bold text-green-600 mb-2">SAVE10</h3>
+                <p className="text-3xl font-bold text-gray-800 mb-2">10% OFF</p>
+              </div>
+              <span className="material-symbols-outlined text-green-600 text-4xl">local_offer</span>
+            </div>
+            <p className="text-gray-600 mb-2">
+              Save on every order!
+            </p>
+            <p className="text-sm text-gray-500">
+              <span className="font-semibold">Minimum order:</span> $15
+            </p>
+            <div className="mt-4 p-3 bg-green-50 rounded-lg">
+              <p className="text-sm text-green-700 font-semibold">
+                Use code: <span className="text-lg font-bold">SAVE10</span>
+              </p>
+            </div>
+          </div>
+
+          <div className="border-2 border-blue-200 rounded-lg p-6 hover:border-blue-400 transition">
+            <div className="flex items-start justify-between mb-4">
+              <div>
+                <h3 className="text-2xl font-bold text-blue-600 mb-2">FLAT5</h3>
+                <p className="text-3xl font-bold text-gray-800 mb-2">$5 OFF</p>
+              </div>
+              <span className="material-symbols-outlined text-blue-600 text-4xl">local_offer</span>
+            </div>
+            <p className="text-gray-600 mb-2">
+              Flat $5 discount on your order!
+            </p>
+            <p className="text-sm text-gray-500">
+              <span className="font-semibold">Minimum order:</span> $10
+            </p>
+            <div className="mt-4 p-3 bg-blue-50 rounded-lg">
+              <p className="text-sm text-blue-700 font-semibold">
+                Use code: <span className="text-lg font-bold">FLAT5</span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div className="bg-gray-100 rounded-lg p-6">
         <h3 className="text-2xl font-semibold text-gray-800 mb-4">How to Redeem Offers</h3>
         <ol className="list-decimal list-inside space-y-2 text-gray-700">
