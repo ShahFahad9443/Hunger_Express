@@ -87,113 +87,69 @@ const Contact = () => {
 
   return (
     <div className="container mx-auto px-4 py-8 mt-20">
-      <h1 className="text-4xl font-bold text-pink-600 mb-8 text-center">Contact Us</h1>
+      <h1 className="text-4xl font-bold text-[#db1020] mb-8 text-center" style={{ fontFamily: 'Poppins, sans-serif' }}>Contact Us</h1>
       
       <div className="max-w-4xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <h2 className="text-2xl font-semibold text-gray-800 mb-4">Get in Touch</h2>
-            <p className="text-gray-700 mb-6">
-              Have a question, feedback, or need assistance? We&apos;re here to help! 
-              Reach out to us through any of the following channels.
-            </p>
-            
-            <div className="space-y-4">
-              <div className="flex items-start">
-                <span className="material-symbols-outlined text-pink-600 text-xl mr-4 mt-1">call</span>
-                <div>
-                  <h3 className="font-semibold text-gray-800">Phone</h3>
-                  <p className="text-gray-600">+1 (555) 123-4567</p>
-                  <p className="text-sm text-gray-500">Mon-Sun: 9:00 AM - 9:00 PM</p>
-                </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-6">
+          <div className="bg-white rounded-[16px] shadow-soft p-3">
+            <h2 className="text-sm font-semibold text-[#1F1F1F] mb-2" style={{ fontFamily: 'Poppins, sans-serif' }}>Get in Touch</h2>
+            <div className="space-y-1.5">
+              <div className="flex items-center gap-2">
+                <span className="material-symbols-outlined text-[#db1020] text-base">call</span>
+                <p className="text-xs text-[#4A4A4A]" style={{ fontFamily: 'Inter, sans-serif' }}>+1 (555) 123-4567</p>
               </div>
-
-              <div className="flex items-start">
-                <span className="material-symbols-outlined text-pink-600 text-xl mr-4 mt-1">mail</span>
-                <div>
-                  <h3 className="font-semibold text-gray-800">Email</h3>
-                  <p className="text-gray-600">support@hungerexpress.com</p>
-                  <p className="text-sm text-gray-500">We respond within 24 hours</p>
-                </div>
+              <div className="flex items-center gap-2">
+                <span className="material-symbols-outlined text-[#db1020] text-base">mail</span>
+                <p className="text-xs text-[#4A4A4A]" style={{ fontFamily: 'Inter, sans-serif' }}>support@hungerexpress.com</p>
               </div>
-
-              <div className="flex items-start">
-                <span className="material-symbols-outlined text-pink-600 text-xl mr-4 mt-1">location_on</span>
-                <div>
-                  <h3 className="font-semibold text-gray-800">Address</h3>
-                  <p className="text-gray-600">
-                    123 Food Street<br />
-                    City, State 12345<br />
-                    United States
-                  </p>
-                </div>
+              <div className="flex items-center gap-2">
+                <span className="material-symbols-outlined text-[#db1020] text-base">location_on</span>
+                <p className="text-xs text-[#4A4A4A]" style={{ fontFamily: 'Inter, sans-serif' }}>123 Food Street</p>
               </div>
             </div>
           </div>
 
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <h2 className="text-2xl font-semibold text-gray-800 mb-4">Business Hours</h2>
-            <div className="space-y-3 text-gray-700">
-              <div className="flex justify-between">
-                <span className="font-semibold">Monday - Friday</span>
-                <span>9:00 AM - 9:00 PM</span>
+          <div className="bg-white rounded-[16px] shadow-soft p-3">
+            <h2 className="text-sm font-semibold text-[#1F1F1F] mb-2" style={{ fontFamily: 'Poppins, sans-serif' }}>Business Hours</h2>
+            <div className="space-y-1 text-[#4A4A4A] mb-2" style={{ fontFamily: 'Inter, sans-serif' }}>
+              <div className="flex justify-between text-xs">
+                <span>Mon-Fri</span>
+                <span>9AM-9PM</span>
               </div>
-              <div className="flex justify-between">
-                <span className="font-semibold">Saturday</span>
-                <span>10:00 AM - 10:00 PM</span>
+              <div className="flex justify-between text-xs">
+                <span>Sat</span>
+                <span>10AM-10PM</span>
               </div>
-              <div className="flex justify-between">
-                <span className="font-semibold">Sunday</span>
-                <span>10:00 AM - 8:00 PM</span>
+              <div className="flex justify-between text-xs">
+                <span>Sun</span>
+                <span>10AM-8PM</span>
               </div>
             </div>
-
-            <div className="mt-6 pt-6 border-t border-gray-200">
-              <h3 className="font-semibold text-gray-800 mb-3">Follow Us</h3>
-              <div className="flex flex-wrap gap-4">
-                <a 
-                  href="#" 
-                  className="flex items-center gap-2 text-pink-600 hover:text-pink-700 transition px-4 py-2 rounded-lg hover:bg-pink-50" 
-                  title="Facebook"
-                >
-                  <span className="material-symbols-outlined text-2xl">group</span>
-                  <span className="font-semibold">Facebook</span>
+            <div className="pt-2 border-t border-gray-200">
+              <div className="flex gap-2">
+                <a href="#" className="text-[#db1020] hover:text-[#ffd700] transition" title="Facebook">
+                  <span className="material-symbols-outlined text-base">group</span>
                 </a>
-                <a 
-                  href="#" 
-                  className="flex items-center gap-2 text-pink-600 hover:text-pink-700 transition px-4 py-2 rounded-lg hover:bg-pink-50" 
-                  title="Twitter"
-                >
-                  <span className="material-symbols-outlined text-2xl">chat</span>
-                  <span className="font-semibold">Twitter</span>
+                <a href="#" className="text-[#db1020] hover:text-[#ffd700] transition" title="Twitter">
+                  <span className="material-symbols-outlined text-base">chat</span>
                 </a>
-                <a 
-                  href="#" 
-                  className="flex items-center gap-2 text-pink-600 hover:text-pink-700 transition px-4 py-2 rounded-lg hover:bg-pink-50" 
-                  title="Instagram"
-                >
-                  <span className="material-symbols-outlined text-2xl">photo_camera</span>
-                  <span className="font-semibold">Instagram</span>
+                <a href="#" className="text-[#db1020] hover:text-[#ffd700] transition" title="Instagram">
+                  <span className="material-symbols-outlined text-base">photo_camera</span>
                 </a>
-                <a 
-                  href="#" 
-                  className="flex items-center gap-2 text-pink-600 hover:text-pink-700 transition px-4 py-2 rounded-lg hover:bg-pink-50" 
-                  title="LinkedIn"
-                >
-                  <span className="material-symbols-outlined text-2xl">work</span>
-                  <span className="font-semibold">LinkedIn</span>
+                <a href="#" className="text-[#db1020] hover:text-[#ffd700] transition" title="LinkedIn">
+                  <span className="material-symbols-outlined text-base">work</span>
                 </a>
               </div>
             </div>
           </div>
         </div>
 
-        <div className="bg-white rounded-lg shadow-md p-8">
-          <h2 className="text-2xl font-semibold text-gray-800 mb-6">Send us a Message</h2>
+        <div className="bg-white rounded-[16px] shadow-medium p-6 md:p-8">
+          <h2 className="text-2xl md:text-3xl font-semibold text-[#1F1F1F] mb-6" style={{ fontFamily: 'Poppins, sans-serif' }}>Send us a Message</h2>
           
           {submitSuccess && (
-            <div className="mb-6 p-4 bg-green-100 border border-green-400 text-green-700 rounded-lg">
-              <div className="flex items-center gap-2">
+            <div className="mb-6 p-4 bg-[#27742d] bg-opacity-10 border border-[#27742d] text-[#27742d] rounded-[16px]">
+              <div className="flex items-center gap-2" style={{ fontFamily: 'Inter, sans-serif' }}>
                 <span className="material-symbols-outlined">check_circle</span>
                 <span>Thank you! Your message has been sent successfully. We&apos;ll get back to you soon.</span>
               </div>
@@ -202,8 +158,8 @@ const Contact = () => {
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
-              <label htmlFor="name" className="block text-gray-700 font-semibold mb-2">
-                Your Name <span className="text-red-500">*</span>
+              <label htmlFor="name" className="block text-[#1F1F1F] font-semibold mb-2" style={{ fontFamily: 'Inter, sans-serif' }}>
+                Your Name <span className="text-[#db1020]">*</span>
               </label>
               <input
                 type="text"
@@ -211,15 +167,16 @@ const Contact = () => {
                 name="name"
                 value={formData.name}
                 onChange={handleChange}
-                className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
+                className={`w-full px-4 py-3 border rounded-[16px] focus:outline-none focus:ring-2 min-h-[44px] ${
                   errors.name
-                    ? "border-red-500 focus:ring-red-500"
-                    : "border-gray-300 focus:ring-pink-500"
+                    ? "border-[#db1020] focus:ring-[#db1020]"
+                    : "border-gray-300 focus:ring-[#db1020]"
                 }`}
+                style={{ fontFamily: 'Inter, sans-serif' }}
                 placeholder="Enter your name"
               />
               {errors.name && (
-                <p className="text-red-500 text-sm mt-1 flex items-center gap-1">
+                <p className="text-[#db1020] text-sm mt-1 flex items-center gap-1" style={{ fontFamily: 'Inter, sans-serif' }}>
                   <span className="material-symbols-outlined text-sm">error</span>
                   {errors.name}
                 </p>
@@ -227,8 +184,8 @@ const Contact = () => {
             </div>
 
             <div>
-              <label htmlFor="email" className="block text-gray-700 font-semibold mb-2">
-                Your Email <span className="text-red-500">*</span>
+              <label htmlFor="email" className="block text-[#1F1F1F] font-semibold mb-2" style={{ fontFamily: 'Inter, sans-serif' }}>
+                Your Email <span className="text-[#db1020]">*</span>
               </label>
               <input
                 type="email"
@@ -236,15 +193,16 @@ const Contact = () => {
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
-                className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
+                className={`w-full px-4 py-3 border rounded-[16px] focus:outline-none focus:ring-2 min-h-[44px] ${
                   errors.email
-                    ? "border-red-500 focus:ring-red-500"
-                    : "border-gray-300 focus:ring-pink-500"
+                    ? "border-[#db1020] focus:ring-[#db1020]"
+                    : "border-gray-300 focus:ring-[#db1020]"
                 }`}
+                style={{ fontFamily: 'Inter, sans-serif' }}
                 placeholder="Enter your email"
               />
               {errors.email && (
-                <p className="text-red-500 text-sm mt-1 flex items-center gap-1">
+                <p className="text-[#db1020] text-sm mt-1 flex items-center gap-1" style={{ fontFamily: 'Inter, sans-serif' }}>
                   <span className="material-symbols-outlined text-sm">error</span>
                   {errors.email}
                 </p>
@@ -252,8 +210,8 @@ const Contact = () => {
             </div>
 
             <div>
-              <label htmlFor="subject" className="block text-gray-700 font-semibold mb-2">
-                Subject <span className="text-red-500">*</span>
+              <label htmlFor="subject" className="block text-[#1F1F1F] font-semibold mb-2" style={{ fontFamily: 'Inter, sans-serif' }}>
+                Subject <span className="text-[#db1020]">*</span>
               </label>
               <input
                 type="text"
@@ -261,15 +219,16 @@ const Contact = () => {
                 name="subject"
                 value={formData.subject}
                 onChange={handleChange}
-                className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
+                className={`w-full px-4 py-3 border rounded-[16px] focus:outline-none focus:ring-2 min-h-[44px] ${
                   errors.subject
-                    ? "border-red-500 focus:ring-red-500"
-                    : "border-gray-300 focus:ring-pink-500"
+                    ? "border-[#db1020] focus:ring-[#db1020]"
+                    : "border-gray-300 focus:ring-[#db1020]"
                 }`}
+                style={{ fontFamily: 'Inter, sans-serif' }}
                 placeholder="What is this regarding?"
               />
               {errors.subject && (
-                <p className="text-red-500 text-sm mt-1 flex items-center gap-1">
+                <p className="text-[#db1020] text-sm mt-1 flex items-center gap-1" style={{ fontFamily: 'Inter, sans-serif' }}>
                   <span className="material-symbols-outlined text-sm">error</span>
                   {errors.subject}
                 </p>
@@ -277,8 +236,8 @@ const Contact = () => {
             </div>
 
             <div>
-              <label htmlFor="message" className="block text-gray-700 font-semibold mb-2">
-                Message <span className="text-red-500">*</span>
+              <label htmlFor="message" className="block text-[#1F1F1F] font-semibold mb-2" style={{ fontFamily: 'Inter, sans-serif' }}>
+                Message <span className="text-[#db1020]">*</span>
               </label>
               <textarea
                 id="message"
@@ -286,21 +245,22 @@ const Contact = () => {
                 rows="5"
                 value={formData.message}
                 onChange={handleChange}
-                className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
+                className={`w-full px-4 py-3 border rounded-[16px] focus:outline-none focus:ring-2 ${
                   errors.message
-                    ? "border-red-500 focus:ring-red-500"
-                    : "border-gray-300 focus:ring-pink-500"
+                    ? "border-[#db1020] focus:ring-[#db1020]"
+                    : "border-gray-300 focus:ring-[#db1020]"
                 }`}
+                style={{ fontFamily: 'Inter, sans-serif' }}
                 placeholder="Tell us how we can help..."
               ></textarea>
               {errors.message && (
-                <p className="text-red-500 text-sm mt-1 flex items-center gap-1">
+                <p className="text-[#db1020] text-sm mt-1 flex items-center gap-1" style={{ fontFamily: 'Inter, sans-serif' }}>
                   <span className="material-symbols-outlined text-sm">error</span>
                   {errors.message}
                 </p>
               )}
               {formData.message && !errors.message && (
-                <p className="text-gray-500 text-sm mt-1">
+                <p className="text-[#6B6B6B] text-sm mt-1" style={{ fontFamily: 'Inter, sans-serif' }}>
                   {formData.message.length} characters
                 </p>
               )}
@@ -309,9 +269,10 @@ const Contact = () => {
             <button
               type="submit"
               disabled={isSubmitting}
-              className={`w-full bg-pink-600 text-white py-3 rounded-lg font-semibold hover:bg-pink-700 transition duration-300 ${
+              className={`w-full bg-[#db1020] text-white py-3 rounded-[16px] font-semibold hover:bg-[#c00e1d] transition duration-300 shadow-medium min-h-[44px] flex items-center justify-center ${
                 isSubmitting ? "opacity-50 cursor-not-allowed" : ""
               }`}
+              style={{ fontFamily: 'Inter, sans-serif' }}
             >
               {isSubmitting ? (
                 <span className="flex items-center justify-center gap-2">

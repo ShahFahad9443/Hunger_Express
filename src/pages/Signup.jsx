@@ -113,10 +113,10 @@ const Signup = () => {
 
   return (
     <div className="min-h-screen flex justify-center items-center bg-gray-100 mt-20 py-8">
-      <div className="w-full max-w-md bg-white shadow-lg rounded-xl p-8">
+      <div className="w-full max-w-md bg-white shadow-medium rounded-[16px] p-8">
         <div className="text-center mb-6">
-          <span className="material-symbols-outlined text-pink-600 text-5xl mb-4">person_add</span>
-          <h2 className="text-3xl font-bold text-pink-600 mb-2">Create Account</h2>
+          <span className="material-symbols-outlined text-[#db1020] text-5xl mb-4">person_add</span>
+          <h2 className="text-3xl font-bold text-[#db1020] mb-2" style={{ fontFamily: 'Poppins, sans-serif' }}>Create Account</h2>
           <p className="text-gray-600">Join Hunger Express today</p>
         </div>
 
@@ -138,10 +138,10 @@ const Signup = () => {
               name="name"
               value={formData.name}
               onChange={handleChange}
-              className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 ${
+              className={`w-full px-4 py-3 border rounded-[16px] focus:outline-none focus:ring-2 min-h-[44px] ${
                 errors.name
                   ? "border-red-500 focus:ring-red-500"
-                  : "border-gray-300 focus:ring-pink-500"
+                  : "border-gray-300 focus:ring-[#db1020]"
               }`}
               placeholder="Enter your full name"
             />
@@ -163,10 +163,10 @@ const Signup = () => {
               name="email"
               value={formData.email}
               onChange={handleChange}
-              className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 ${
+              className={`w-full px-4 py-3 border rounded-[16px] focus:outline-none focus:ring-2 min-h-[44px] ${
                 errors.email
                   ? "border-red-500 focus:ring-red-500"
-                  : "border-gray-300 focus:ring-pink-500"
+                  : "border-gray-300 focus:ring-[#db1020]"
               }`}
               placeholder="Enter your email"
             />
@@ -188,10 +188,10 @@ const Signup = () => {
               name="username"
               value={formData.username}
               onChange={handleChange}
-              className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 ${
+              className={`w-full px-4 py-3 border rounded-[16px] focus:outline-none focus:ring-2 min-h-[44px] ${
                 errors.username
                   ? "border-red-500 focus:ring-red-500"
-                  : "border-gray-300 focus:ring-pink-500"
+                  : "border-gray-300 focus:ring-[#db1020]"
               }`}
               placeholder="Choose a username"
             />
@@ -213,10 +213,10 @@ const Signup = () => {
               name="password"
               value={formData.password}
               onChange={handleChange}
-              className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 ${
+              className={`w-full px-4 py-3 border rounded-[16px] focus:outline-none focus:ring-2 min-h-[44px] ${
                 errors.password
                   ? "border-red-500 focus:ring-red-500"
-                  : "border-gray-300 focus:ring-pink-500"
+                  : "border-gray-300 focus:ring-[#db1020]"
               }`}
               placeholder="Create a password"
             />
@@ -243,10 +243,10 @@ const Signup = () => {
               name="confirmPassword"
               value={formData.confirmPassword}
               onChange={handleChange}
-              className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 ${
+              className={`w-full px-4 py-3 border rounded-[16px] focus:outline-none focus:ring-2 min-h-[44px] ${
                 errors.confirmPassword
                   ? "border-red-500 focus:ring-red-500"
-                  : "border-gray-300 focus:ring-pink-500"
+                  : "border-gray-300 focus:ring-[#db1020]"
               }`}
               placeholder="Confirm your password"
             />
@@ -261,9 +261,10 @@ const Signup = () => {
           <button
             type="submit"
             disabled={isSubmitting}
-            className={`w-full bg-pink-600 text-white py-3 rounded-lg font-semibold hover:bg-pink-700 transition duration-300 ${
+            className={`w-full bg-[#db1020] text-white py-3 rounded-[16px] font-semibold hover:bg-[#c00e1d] transition duration-300 shadow-medium min-h-[44px] ${
               isSubmitting ? "opacity-50 cursor-not-allowed" : ""
             }`}
+            style={{ fontFamily: 'Inter, sans-serif' }}
           >
             {isSubmitting ? (
               <span className="flex items-center justify-center gap-2">
@@ -287,7 +288,7 @@ const Signup = () => {
         <div className="mt-6 text-center">
           <p className="text-gray-600 text-sm">
             Already have an account?{" "}
-            <Link to="/login" className="text-pink-600 hover:text-pink-700 font-semibold">
+            <Link to="/login" className="text-[#db1020] hover:text-[#ffd700] font-semibold" style={{ fontFamily: 'Inter, sans-serif' }}>
               Login
             </Link>
           </p>

@@ -51,10 +51,10 @@ const Login = () => {
 
   return (
     <div className="min-h-screen flex justify-center items-center bg-gray-100 mt-20">
-      <div className="w-full max-w-md bg-white shadow-lg rounded-xl p-8">
+      <div className="w-full max-w-md bg-white shadow-medium rounded-[16px] p-8">
         <div className="text-center mb-6">
-          <span className="material-symbols-outlined text-pink-600 text-5xl mb-4">account_circle</span>
-          <h2 className="text-3xl font-bold text-pink-600 mb-2">Login</h2>
+          <span className="material-symbols-outlined text-[#db1020] text-5xl mb-4">account_circle</span>
+          <h2 className="text-3xl font-bold text-[#db1020] mb-2" style={{ fontFamily: 'Poppins, sans-serif' }}>Login</h2>
           <p className="text-gray-600">Sign in to your account</p>
         </div>
 
@@ -76,7 +76,8 @@ const Login = () => {
               name="username"
               value={formData.username}
               onChange={handleChange}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500"
+              className="w-full px-4 py-3 border border-gray-300 rounded-[16px] focus:outline-none focus:ring-2 focus:ring-[#db1020] min-h-[44px]"
+              style={{ fontFamily: 'Inter, sans-serif' }}
               placeholder="Enter your username"
               required
             />
@@ -92,7 +93,8 @@ const Login = () => {
               name="password"
               value={formData.password}
               onChange={handleChange}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500"
+              className="w-full px-4 py-3 border border-gray-300 rounded-[16px] focus:outline-none focus:ring-2 focus:ring-[#db1020] min-h-[44px]"
+              style={{ fontFamily: 'Inter, sans-serif' }}
               placeholder="Enter your password"
               required
             />
@@ -107,9 +109,10 @@ const Login = () => {
           <button
             type="submit"
             disabled={isSubmitting}
-            className={`w-full bg-pink-600 text-white py-3 rounded-lg font-semibold hover:bg-pink-700 transition duration-300 ${
+            className={`w-full bg-[#db1020] text-white py-3 rounded-[16px] font-semibold hover:bg-[#c00e1d] transition duration-300 shadow-medium min-h-[44px] ${
               isSubmitting ? "opacity-50 cursor-not-allowed" : ""
             }`}
+            style={{ fontFamily: 'Inter, sans-serif' }}
           >
             {isSubmitting ? (
               <span className="flex items-center justify-center gap-2">
@@ -133,7 +136,7 @@ const Login = () => {
         <div className="mt-6 text-center">
           <p className="text-gray-600 text-sm">
             Don&apos;t have an account?{" "}
-            <Link to="/signup" className="text-pink-600 hover:text-pink-700 font-semibold">
+            <Link to="/signup" className="text-[#db1020] hover:text-[#ffd700] font-semibold" style={{ fontFamily: 'Inter, sans-serif' }}>
               Sign Up
             </Link>
           </p>

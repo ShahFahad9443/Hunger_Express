@@ -184,13 +184,14 @@ const Checkout = () => {
       <div className="container mx-auto px-4 py-8 mt-20">
         <div className="max-w-2xl mx-auto text-center">
           <div className="text-6xl mb-6">🛒</div>
-          <h1 className="text-4xl font-bold text-pink-600 mb-4">Your Cart is Empty</h1>
-          <p className="text-gray-600 text-lg mb-8">
+          <h1 className="text-4xl font-bold text-[#db1020] mb-4" style={{ fontFamily: 'Poppins, sans-serif' }}>Your Cart is Empty</h1>
+          <p className="text-[#4A4A4A] text-lg mb-8" style={{ fontFamily: 'Inter, sans-serif' }}>
             Add items to your cart before proceeding to checkout.
           </p>
           <button
             onClick={() => navigate("/restaurants")}
-            className="inline-block bg-pink-600 text-white px-8 py-4 rounded-xl font-semibold text-lg hover:bg-pink-700 transition duration-300 shadow-lg"
+            className="inline-block bg-[#db1020] text-white px-8 py-4 rounded-[16px] font-semibold text-lg hover:bg-[#c00e1d] transition duration-300 shadow-medium min-h-[44px]"
+            style={{ fontFamily: 'Inter, sans-serif' }}
           >
             Browse Restaurants
           </button>
@@ -201,12 +202,12 @@ const Checkout = () => {
 
   return (
     <div className="container mx-auto px-4 py-8 mt-20">
-      <h1 className="text-4xl font-bold text-pink-600 mb-8">Checkout</h1>
+      <h1 className="text-4xl font-bold text-[#db1020] mb-8" style={{ fontFamily: 'Poppins, sans-serif' }}>Checkout</h1>
 
       <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2 space-y-8">
           {/* Delivery Information */}
-          <section className="bg-white rounded-lg shadow-md p-6">
+          <section className="bg-white rounded-[16px] shadow-soft p-6">
             <h2 className="text-2xl font-semibold text-gray-800 mb-6">Delivery Information</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
@@ -219,7 +220,7 @@ const Checkout = () => {
                   name="fullName"
                   value={formData.fullName}
                   onChange={handleChange}
-                  className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 ${
+                  className={`w-full px-4 py-2 border rounded-[16px] focus:outline-none focus:ring-2 focus:ring-[#db1020] min-h-[44px] ${
                     errors.fullName ? "border-red-500" : "border-gray-300"
                   }`}
                   placeholder="John Doe"
@@ -239,7 +240,7 @@ const Checkout = () => {
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
-                  className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 ${
+                  className={`w-full px-4 py-2 border rounded-[16px] focus:outline-none focus:ring-2 focus:ring-[#db1020] min-h-[44px] ${
                     errors.email ? "border-red-500" : "border-gray-300"
                   }`}
                   placeholder="john@example.com"
@@ -259,7 +260,7 @@ const Checkout = () => {
                   name="phone"
                   value={formData.phone}
                   onChange={handleChange}
-                  className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 ${
+                  className={`w-full px-4 py-2 border rounded-[16px] focus:outline-none focus:ring-2 focus:ring-[#db1020] min-h-[44px] ${
                     errors.phone ? "border-red-500" : "border-gray-300"
                   }`}
                   placeholder="(555) 123-4567"
@@ -279,7 +280,7 @@ const Checkout = () => {
                   name="address"
                   value={formData.address}
                   onChange={handleChange}
-                  className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 ${
+                  className={`w-full px-4 py-2 border rounded-[16px] focus:outline-none focus:ring-2 focus:ring-[#db1020] min-h-[44px] ${
                     errors.address ? "border-red-500" : "border-gray-300"
                   }`}
                   placeholder="123 Main St"
@@ -299,7 +300,7 @@ const Checkout = () => {
                   name="city"
                   value={formData.city}
                   onChange={handleChange}
-                  className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 ${
+                  className={`w-full px-4 py-2 border rounded-[16px] focus:outline-none focus:ring-2 focus:ring-[#db1020] min-h-[44px] ${
                     errors.city ? "border-red-500" : "border-gray-300"
                   }`}
                   placeholder="New York"
@@ -319,7 +320,7 @@ const Checkout = () => {
                   name="state"
                   value={formData.state}
                   onChange={handleChange}
-                  className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 ${
+                  className={`w-full px-4 py-2 border rounded-[16px] focus:outline-none focus:ring-2 focus:ring-[#db1020] min-h-[44px] ${
                     errors.state ? "border-red-500" : "border-gray-300"
                   }`}
                   placeholder="NY"
@@ -339,7 +340,7 @@ const Checkout = () => {
                   name="zipCode"
                   value={formData.zipCode}
                   onChange={handleChange}
-                  className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 ${
+                  className={`w-full px-4 py-2 border rounded-[16px] focus:outline-none focus:ring-2 focus:ring-[#db1020] min-h-[44px] ${
                     errors.zipCode ? "border-red-500" : "border-gray-300"
                   }`}
                   placeholder="10001"
@@ -352,7 +353,7 @@ const Checkout = () => {
           </section>
 
           {/* Payment Method */}
-          <section className="bg-white rounded-lg shadow-md p-6">
+          <section className="bg-white rounded-[16px] shadow-soft p-6">
             <h2 className="text-2xl font-semibold text-gray-800 mb-6">Payment Method</h2>
             <div className="space-y-4">
               <div className="flex items-center space-x-4">
@@ -363,7 +364,7 @@ const Checkout = () => {
                   value="card"
                   checked={formData.paymentMethod === "card"}
                   onChange={handleChange}
-                  className="w-5 h-5 text-pink-600"
+                  className="w-5 h-5 text-[#db1020]"
                 />
                 <label htmlFor="card" className="text-gray-700 font-semibold cursor-pointer">
                   Credit/Debit Card
@@ -378,7 +379,7 @@ const Checkout = () => {
                   value="cash"
                   checked={formData.paymentMethod === "cash"}
                   onChange={handleChange}
-                  className="w-5 h-5 text-pink-600"
+                  className="w-5 h-5 text-[#db1020]"
                 />
                 <label htmlFor="cash" className="text-gray-700 font-semibold cursor-pointer">
                   Cash on Delivery
@@ -399,7 +400,7 @@ const Checkout = () => {
                       onChange={handleChange}
                       maxLength="19"
                       placeholder="1234 5678 9012 3456"
-                      className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 ${
+                      className={`w-full px-4 py-2 border rounded-[16px] focus:outline-none focus:ring-2 focus:ring-[#db1020] min-h-[44px] ${
                         errors.cardNumber ? "border-red-500" : "border-gray-300"
                       }`}
                     />
@@ -418,7 +419,7 @@ const Checkout = () => {
                       name="cardName"
                       value={formData.cardName}
                       onChange={handleChange}
-                      className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 ${
+                      className={`w-full px-4 py-2 border rounded-[16px] focus:outline-none focus:ring-2 focus:ring-[#db1020] min-h-[44px] ${
                         errors.cardName ? "border-red-500" : "border-gray-300"
                       }`}
                       placeholder="John Doe"
@@ -441,7 +442,7 @@ const Checkout = () => {
                         onChange={handleChange}
                         maxLength="5"
                         placeholder="MM/YY"
-                        className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 ${
+                        className={`w-full px-4 py-2 border rounded-[16px] focus:outline-none focus:ring-2 focus:ring-[#db1020] min-h-[44px] ${
                           errors.expiryDate ? "border-red-500" : "border-gray-300"
                         }`}
                       />
@@ -462,7 +463,7 @@ const Checkout = () => {
                         onChange={handleChange}
                         maxLength="4"
                         placeholder="123"
-                        className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 ${
+                        className={`w-full px-4 py-2 border rounded-[16px] focus:outline-none focus:ring-2 focus:ring-[#db1020] min-h-[44px] ${
                           errors.cvv ? "border-red-500" : "border-gray-300"
                         }`}
                       />
@@ -525,13 +526,15 @@ const Checkout = () => {
                         handleApplyPromo();
                       }
                     }}
-                    className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500"
+                    className="flex-1 px-4 py-2 border border-gray-300 rounded-[16px] focus:outline-none focus:ring-2 focus:ring-[#db1020] min-h-[44px]"
                     placeholder="Enter code"
+                    style={{ fontFamily: 'Inter, sans-serif' }}
                   />
                   <button
                     type="button"
                     onClick={handleApplyPromo}
-                    className="bg-pink-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-pink-700 transition"
+                    className="bg-[#db1020] text-white px-4 py-2 rounded-[16px] font-semibold hover:bg-[#c00e1d] transition min-h-[44px]"
+                    style={{ fontFamily: 'Inter, sans-serif' }}
                   >
                     Apply
                   </button>
@@ -578,7 +581,7 @@ const Checkout = () => {
               <div className="border-t border-gray-300 pt-3">
                 <div className="flex justify-between text-xl font-bold text-gray-800">
                   <span>Total</span>
-                  <span className="text-pink-600">${total.toFixed(2)}</span>
+                  <span className="text-[#db1020]">${total.toFixed(2)}</span>
                 </div>
               </div>
             </div>
@@ -586,9 +589,10 @@ const Checkout = () => {
             <button
               type="submit"
               disabled={isSubmitting}
-              className={`w-full bg-pink-600 text-white py-4 rounded-xl font-semibold text-lg hover:bg-pink-700 transition duration-300 shadow-lg ${
+              className={`w-full bg-[#db1020] text-white py-4 rounded-[16px] font-semibold text-lg hover:bg-[#c00e1d] transition duration-300 shadow-medium min-h-[44px] ${
                 isSubmitting ? "opacity-50 cursor-not-allowed" : ""
               }`}
+              style={{ fontFamily: 'Inter, sans-serif' }}
             >
               {isSubmitting ? "Processing..." : "Place Order"}
             </button>

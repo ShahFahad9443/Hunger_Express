@@ -7,6 +7,8 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Home from "./pages/Home";
 import Restaurant from "./pages/Restaurant";
+import RestaurantDetails from "./pages/RestaurantDetails";
+import SearchResults from "./pages/SearchResults";
 import Offers from "./pages/Offers";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
@@ -29,6 +31,8 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/restaurants" element={<Restaurant />} />
+          <Route path="/restaurants/:id" element={<RestaurantDetails />} />
+          <Route path="/search" element={<SearchResults />} />
           <Route path="/offers" element={<Offers />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />

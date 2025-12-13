@@ -1,7 +1,7 @@
 const About = () => {
   return (
     <div className="container mx-auto px-4 py-8 mt-20">
-      <h1 className="text-4xl font-bold text-pink-600 mb-8 text-center">About Hunger Express</h1>
+      <h1 className="text-4xl font-bold text-[#db1020] mb-8 text-center" style={{ fontFamily: 'Poppins, sans-serif' }}>About Hunger Express</h1>
       
       <div className="max-w-4xl mx-auto">
         <section className="mb-12">
@@ -31,15 +31,15 @@ const About = () => {
         <section className="mb-12">
           <h2 className="text-3xl font-semibold text-gray-800 mb-4">Why Choose Us?</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-white rounded-lg shadow-md p-6">
-              <h3 className="text-xl font-semibold text-pink-600 mb-3">⚡ Fast Delivery</h3>
+            <div className="bg-white rounded-[16px] shadow-soft p-6">
+              <h3 className="text-xl font-semibold text-[#db1020] mb-3" style={{ fontFamily: 'Poppins, sans-serif' }}>⚡ Fast Delivery</h3>
               <p className="text-gray-700">
                 Our efficient delivery network ensures your food arrives hot and fresh, 
                 typically within 30-45 minutes of ordering.
               </p>
             </div>
 
-            <div className="bg-white rounded-lg shadow-md p-6">
+            <div className="bg-white rounded-[16px] shadow-soft p-6">
               <h3 className="text-xl font-semibold text-pink-600 mb-3">🍽️ Wide Selection</h3>
               <p className="text-gray-700">
                 Choose from hundreds of restaurants offering cuisines from around the world, 
@@ -47,7 +47,7 @@ const About = () => {
               </p>
             </div>
 
-            <div className="bg-white rounded-lg shadow-md p-6">
+            <div className="bg-white rounded-[16px] shadow-soft p-6">
               <h3 className="text-xl font-semibold text-pink-600 mb-3">💳 Easy Payment</h3>
               <p className="text-gray-700">
                 Multiple payment options including credit cards, debit cards, digital wallets, 
@@ -55,7 +55,7 @@ const About = () => {
               </p>
             </div>
 
-            <div className="bg-white rounded-lg shadow-md p-6">
+            <div className="bg-white rounded-[16px] shadow-soft p-6">
               <h3 className="text-xl font-semibold text-pink-600 mb-3">⭐ Quality Assured</h3>
               <p className="text-gray-700">
                 We partner only with verified restaurants that meet our high standards 
@@ -76,8 +76,8 @@ const About = () => {
           </ul>
         </section>
 
-        <section className="bg-pink-50 rounded-lg p-8 text-center">
-          <h2 className="text-3xl font-semibold text-pink-600 mb-4">Join Us on Our Journey</h2>
+        <section className="bg-[#ffd700] bg-opacity-10 rounded-[16px] p-8 text-center">
+          <h2 className="text-3xl font-semibold text-[#db1020] mb-4" style={{ fontFamily: 'Poppins, sans-serif' }}>Join Us on Our Journey</h2>
           <p className="text-gray-700 text-lg mb-6">
             Whether you&apos;re a food lover looking for your next meal or a restaurant owner 
             wanting to reach more customers, we&apos;d love to have you as part of the Hunger Express family.
