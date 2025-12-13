@@ -91,52 +91,52 @@ const Contact = () => {
       
       <div className="max-w-4xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-6">
-          <div className="bg-white rounded-[16px] shadow-soft p-3">
-            <h2 className="text-sm font-semibold text-[#1F1F1F] mb-2" style={{ fontFamily: 'Poppins, sans-serif' }}>Get in Touch</h2>
+          <div className="bg-white rounded-[16px] shadow-soft p-3 hover:shadow-large transition-all duration-300 transform hover:-translate-y-1 hover:scale-[1.02] group cursor-pointer">
+            <h2 className="text-sm font-semibold text-[#1F1F1F] mb-2 group-hover:text-[#db1020] transition-colors duration-300" style={{ fontFamily: 'Poppins, sans-serif' }}>Get in Touch</h2>
             <div className="space-y-1.5">
-              <div className="flex items-center gap-2">
-                <span className="material-symbols-outlined text-[#db1020] text-base">call</span>
-                <p className="text-xs text-[#4A4A4A]" style={{ fontFamily: 'Inter, sans-serif' }}>+1 (555) 123-4567</p>
+              <div className="flex items-center gap-2 group-hover:gap-3 transition-all duration-300">
+                <span className="material-symbols-outlined text-[#db1020] text-base transform group-hover:scale-110 transition-transform duration-300">call</span>
+                <p className="text-xs text-[#4A4A4A] group-hover:text-[#1F1F1F] transition-colors duration-300" style={{ fontFamily: 'Inter, sans-serif' }}>+1 (555) 123-4567</p>
               </div>
-              <div className="flex items-center gap-2">
-                <span className="material-symbols-outlined text-[#db1020] text-base">mail</span>
-                <p className="text-xs text-[#4A4A4A]" style={{ fontFamily: 'Inter, sans-serif' }}>support@hungerexpress.com</p>
+              <div className="flex items-center gap-2 group-hover:gap-3 transition-all duration-300">
+                <span className="material-symbols-outlined text-[#db1020] text-base transform group-hover:scale-110 transition-transform duration-300">mail</span>
+                <p className="text-xs text-[#4A4A4A] group-hover:text-[#1F1F1F] transition-colors duration-300" style={{ fontFamily: 'Inter, sans-serif' }}>support@hungerexpress.com</p>
               </div>
-              <div className="flex items-center gap-2">
-                <span className="material-symbols-outlined text-[#db1020] text-base">location_on</span>
-                <p className="text-xs text-[#4A4A4A]" style={{ fontFamily: 'Inter, sans-serif' }}>123 Food Street</p>
+              <div className="flex items-center gap-2 group-hover:gap-3 transition-all duration-300">
+                <span className="material-symbols-outlined text-[#db1020] text-base transform group-hover:scale-110 transition-transform duration-300">location_on</span>
+                <p className="text-xs text-[#4A4A4A] group-hover:text-[#1F1F1F] transition-colors duration-300" style={{ fontFamily: 'Inter, sans-serif' }}>123 Food Street</p>
               </div>
             </div>
           </div>
 
-          <div className="bg-white rounded-[16px] shadow-soft p-3">
-            <h2 className="text-sm font-semibold text-[#1F1F1F] mb-2" style={{ fontFamily: 'Poppins, sans-serif' }}>Business Hours</h2>
-            <div className="space-y-1 text-[#4A4A4A] mb-2" style={{ fontFamily: 'Inter, sans-serif' }}>
-              <div className="flex justify-between text-xs">
+          <div className="bg-white rounded-[16px] shadow-soft p-3 hover:shadow-large transition-all duration-300 transform hover:-translate-y-1 hover:scale-[1.02] group cursor-pointer">
+            <h2 className="text-sm font-semibold text-[#1F1F1F] mb-2 group-hover:text-[#db1020] transition-colors duration-300" style={{ fontFamily: 'Poppins, sans-serif' }}>Business Hours</h2>
+            <div className="space-y-1 text-[#4A4A4A] mb-2 group-hover:text-[#1F1F1F] transition-colors duration-300" style={{ fontFamily: 'Inter, sans-serif' }}>
+              <div className="flex justify-between text-xs hover:text-[#db1020] transition-colors duration-300">
                 <span>Mon-Fri</span>
                 <span>9AM-9PM</span>
               </div>
-              <div className="flex justify-between text-xs">
+              <div className="flex justify-between text-xs hover:text-[#db1020] transition-colors duration-300">
                 <span>Sat</span>
                 <span>10AM-10PM</span>
               </div>
-              <div className="flex justify-between text-xs">
+              <div className="flex justify-between text-xs hover:text-[#db1020] transition-colors duration-300">
                 <span>Sun</span>
                 <span>10AM-8PM</span>
               </div>
             </div>
             <div className="pt-2 border-t border-gray-200">
               <div className="flex gap-2">
-                <a href="#" className="text-[#db1020] hover:text-[#ffd700] transition" title="Facebook">
+                <a href="#" className="text-[#db1020] hover:text-[#ffd700] transition-all duration-300 transform hover:scale-125 hover:rotate-12" title="Facebook">
                   <span className="material-symbols-outlined text-base">group</span>
                 </a>
-                <a href="#" className="text-[#db1020] hover:text-[#ffd700] transition" title="Twitter">
+                <a href="#" className="text-[#db1020] hover:text-[#ffd700] transition-all duration-300 transform hover:scale-125 hover:rotate-12" title="Twitter">
                   <span className="material-symbols-outlined text-base">chat</span>
                 </a>
-                <a href="#" className="text-[#db1020] hover:text-[#ffd700] transition" title="Instagram">
+                <a href="#" className="text-[#db1020] hover:text-[#ffd700] transition-all duration-300 transform hover:scale-125 hover:rotate-12" title="Instagram">
                   <span className="material-symbols-outlined text-base">photo_camera</span>
                 </a>
-                <a href="#" className="text-[#db1020] hover:text-[#ffd700] transition" title="LinkedIn">
+                <a href="#" className="text-[#db1020] hover:text-[#ffd700] transition-all duration-300 transform hover:scale-125 hover:rotate-12" title="LinkedIn">
                   <span className="material-symbols-outlined text-base">work</span>
                 </a>
               </div>
@@ -144,8 +144,8 @@ const Contact = () => {
           </div>
         </div>
 
-        <div className="bg-white rounded-[16px] shadow-medium p-6 md:p-8">
-          <h2 className="text-2xl md:text-3xl font-semibold text-[#1F1F1F] mb-6" style={{ fontFamily: 'Poppins, sans-serif' }}>Send us a Message</h2>
+        <div className="bg-white rounded-[16px] shadow-medium p-6 md:p-8 hover:shadow-large transition-all duration-300 transform hover:-translate-y-1 group">
+          <h2 className="text-2xl md:text-3xl font-semibold text-[#1F1F1F] mb-6 group-hover:text-[#db1020] transition-colors duration-300" style={{ fontFamily: 'Poppins, sans-serif' }}>Send us a Message</h2>
           
           {submitSuccess && (
             <div className="mb-6 p-4 bg-[#27742d] bg-opacity-10 border border-[#27742d] text-[#27742d] rounded-[16px]">
@@ -269,7 +269,7 @@ const Contact = () => {
             <button
               type="submit"
               disabled={isSubmitting}
-              className={`w-full bg-[#db1020] text-white py-3 rounded-[16px] font-semibold hover:bg-[#c00e1d] transition duration-300 shadow-medium min-h-[44px] flex items-center justify-center ${
+              className={`w-full bg-[#db1020] text-white py-3 rounded-[16px] font-semibold hover:bg-[#c00e1d] transition-all duration-300 shadow-medium hover:shadow-large hover:scale-[1.02] min-h-[44px] flex items-center justify-center transform ${
                 isSubmitting ? "opacity-50 cursor-not-allowed" : ""
               }`}
               style={{ fontFamily: 'Inter, sans-serif' }}
@@ -286,19 +286,19 @@ const Contact = () => {
           </form>
         </div>
 
-        <div className="mt-8 bg-gray-100 rounded-lg p-6">
-          <h3 className="text-xl font-semibold text-gray-800 mb-3">Frequently Asked Questions</h3>
-          <div className="space-y-4 text-gray-700">
-            <div>
-              <p className="font-semibold mb-1">How long does delivery take?</p>
+        <div className="mt-8 bg-[#f9f5f5] rounded-[16px] shadow-soft p-6 hover:shadow-large transition-all duration-300 transform hover:-translate-y-1 group">
+          <h3 className="text-xl font-semibold text-[#1F1F1F] mb-3 group-hover:text-[#db1020] transition-colors duration-300" style={{ fontFamily: 'Poppins, sans-serif' }}>Frequently Asked Questions</h3>
+          <div className="space-y-4 text-[#4A4A4A] group-hover:text-[#1F1F1F] transition-colors duration-300" style={{ fontFamily: 'Inter, sans-serif' }}>
+            <div className="hover:bg-white hover:bg-opacity-50 rounded-[12px] p-3 transition-all duration-300 cursor-default">
+              <p className="font-semibold mb-1 hover:text-[#db1020] transition-colors duration-300">How long does delivery take?</p>
               <p className="text-sm">Typically 30-45 minutes depending on your location and restaurant.</p>
             </div>
-            <div>
-              <p className="font-semibold mb-1">What payment methods do you accept?</p>
+            <div className="hover:bg-white hover:bg-opacity-50 rounded-[12px] p-3 transition-all duration-300 cursor-default">
+              <p className="font-semibold mb-1 hover:text-[#db1020] transition-colors duration-300">What payment methods do you accept?</p>
               <p className="text-sm">We accept credit cards, debit cards, digital wallets, and cash on delivery.</p>
             </div>
-            <div>
-              <p className="font-semibold mb-1">Can I cancel my order?</p>
+            <div className="hover:bg-white hover:bg-opacity-50 rounded-[12px] p-3 transition-all duration-300 cursor-default">
+              <p className="font-semibold mb-1 hover:text-[#db1020] transition-colors duration-300">Can I cancel my order?</p>
               <p className="text-sm">Yes, you can cancel your order within 5 minutes of placing it through the app.</p>
             </div>
           </div>

@@ -84,31 +84,31 @@ const Home = () => {
             Why Choose Hunger Express?
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="bg-white rounded-[16px] shadow-soft p-8 text-center hover:shadow-medium transition duration-300 border-2 border-transparent hover:border-[#27742d]">
-              <div className="text-5xl mb-4">⚡</div>
-              <h3 className="text-2xl font-semibold text-[#1F1F1F] mb-3" style={{ fontFamily: 'Poppins, sans-serif' }}>Fast Delivery</h3>
-              <p className="text-[#4A4A4A]" style={{ fontFamily: 'Inter, sans-serif' }}>
+            <div className="bg-white rounded-[16px] shadow-soft p-8 text-center hover:shadow-large transition-all duration-300 border-2 border-transparent hover:border-[#27742d] transform hover:-translate-y-2 hover:scale-[1.02] group cursor-pointer">
+              <div className="text-5xl mb-4 transform group-hover:scale-110 group-hover:rotate-12 transition-transform duration-300">⚡</div>
+              <h3 className="text-2xl font-semibold text-[#1F1F1F] mb-3 group-hover:text-[#27742d] transition-colors duration-300" style={{ fontFamily: 'Poppins, sans-serif' }}>Fast Delivery</h3>
+              <p className="text-[#4A4A4A] group-hover:text-[#1F1F1F] transition-colors duration-300" style={{ fontFamily: 'Inter, sans-serif' }}>
                 Get your food delivered in 30-45 minutes. We ensure your meals arrive 
                 hot and fresh, every time.
               </p>
-              <div className="mt-4 inline-block bg-[#27742d] text-white px-4 py-2 rounded-full text-sm font-semibold" style={{ fontFamily: 'Inter, sans-serif' }}>
+              <div className="mt-4 inline-block bg-[#27742d] text-white px-4 py-2 rounded-full text-sm font-semibold transform group-hover:scale-110 transition-transform duration-300 shadow-soft group-hover:shadow-medium" style={{ fontFamily: 'Inter, sans-serif' }}>
                 ✓ Guaranteed Fresh
               </div>
             </div>
 
-            <div className="bg-white rounded-[16px] shadow-soft p-8 text-center hover:shadow-medium transition duration-300">
-              <div className="text-5xl mb-4">🍽️</div>
-              <h3 className="text-2xl font-semibold text-[#1F1F1F] mb-3" style={{ fontFamily: 'Poppins, sans-serif' }}>Wide Selection</h3>
-              <p className="text-[#4A4A4A]" style={{ fontFamily: 'Inter, sans-serif' }}>
+            <div className="bg-white rounded-[16px] shadow-soft p-8 text-center hover:shadow-large transition-all duration-300 border-2 border-transparent hover:border-[#db1020] transform hover:-translate-y-2 hover:scale-[1.02] group cursor-pointer">
+              <div className="text-5xl mb-4 transform group-hover:scale-110 group-hover:rotate-12 transition-transform duration-300">🍽️</div>
+              <h3 className="text-2xl font-semibold text-[#1F1F1F] mb-3 group-hover:text-[#db1020] transition-colors duration-300" style={{ fontFamily: 'Poppins, sans-serif' }}>Wide Selection</h3>
+              <p className="text-[#4A4A4A] group-hover:text-[#1F1F1F] transition-colors duration-300" style={{ fontFamily: 'Inter, sans-serif' }}>
                 Choose from hundreds of restaurants offering cuisines from around 
                 the world, all in one place.
               </p>
             </div>
 
-            <div className="bg-white rounded-[16px] shadow-soft p-8 text-center hover:shadow-medium transition duration-300">
-              <div className="text-5xl mb-4">💳</div>
-              <h3 className="text-2xl font-semibold text-[#1F1F1F] mb-3" style={{ fontFamily: 'Poppins, sans-serif' }}>Easy Payment</h3>
-              <p className="text-[#4A4A4A]" style={{ fontFamily: 'Inter, sans-serif' }}>
+            <div className="bg-white rounded-[16px] shadow-soft p-8 text-center hover:shadow-large transition-all duration-300 border-2 border-transparent hover:border-[#ffd700] transform hover:-translate-y-2 hover:scale-[1.02] group cursor-pointer">
+              <div className="text-5xl mb-4 transform group-hover:scale-110 group-hover:rotate-12 transition-transform duration-300">💳</div>
+              <h3 className="text-2xl font-semibold text-[#1F1F1F] mb-3 group-hover:text-[#ffd700] transition-colors duration-300" style={{ fontFamily: 'Poppins, sans-serif' }}>Easy Payment</h3>
+              <p className="text-[#4A4A4A] group-hover:text-[#1F1F1F] transition-colors duration-300" style={{ fontFamily: 'Inter, sans-serif' }}>
                 Multiple payment options including cards, digital wallets, and cash 
                 on delivery for your convenience.
               </p>
@@ -137,25 +137,26 @@ const Home = () => {
                 <Link
                   key={restaurant.id}
                   to={`/restaurants/${restaurant.id}`}
-                  className="bg-white rounded-[16px] shadow-soft overflow-hidden hover:shadow-medium transition duration-300 flex flex-col cursor-pointer"
+                  className="bg-white rounded-[16px] shadow-soft overflow-hidden hover:shadow-large transition-all duration-300 flex flex-col cursor-pointer group"
                 >
-                  <div className="relative h-48 w-full overflow-hidden">
+                  <div className="relative h-48 w-full overflow-hidden transform group-hover:-translate-y-2 group-hover:scale-[1.02] transition-transform duration-300">
                     <img
                       src={restaurant.image}
                       alt={restaurant.name}
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                       onError={(e) => {
                         e.target.src = "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800&h=600&fit=crop";
                       }}
                     />
-                    <div className="absolute top-3 right-3">
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <div className="absolute top-3 right-3 transform group-hover:scale-110 transition-transform duration-300">
                       <span className="bg-[#ffd700] text-[#1F1F1F] px-3 py-1 rounded-full text-sm font-semibold backdrop-blur-sm bg-opacity-95 shadow-soft" style={{ fontFamily: 'Inter, sans-serif' }}>
                         {restaurant.cuisine}
                       </span>
                     </div>
                   </div>
                   <div className="p-6 flex flex-col flex-grow">
-                    <h3 className="text-2xl font-semibold text-[#1F1F1F] mb-3 hover:text-[#db1020] transition" style={{ fontFamily: 'Poppins, sans-serif' }}>{restaurant.name}</h3>
+                    <h3 className="text-2xl font-semibold text-[#1F1F1F] mb-3 group-hover:text-[#db1020] transition-colors duration-300" style={{ fontFamily: 'Poppins, sans-serif' }}>{restaurant.name}</h3>
                     <p className="text-[#4A4A4A] mb-4 flex-grow" style={{ fontFamily: 'Inter, sans-serif' }}>
                       {restaurant.description}
                     </p>

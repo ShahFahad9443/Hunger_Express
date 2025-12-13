@@ -107,16 +107,55 @@ const Checkout = () => {
       setIsSubmitting(true);
       // Simulate API call
       setTimeout(() => {
-        clearCart();
-        setIsSubmitting(false);
         const finalSubtotal = getTotalPrice();
         const finalDiscount = calculateDiscount();
+        const deliveryFee = 2.99;
         const finalTax = (finalSubtotal - finalDiscount) * 0.08;
-        const finalTotal = finalSubtotal - finalDiscount + 2.99 + finalTax;
+        const finalTotal = finalSubtotal - finalDiscount + deliveryFee + finalTax;
+        const orderNumber = `ORD-${Date.now()}`;
+        
+        // Save order to localStorage
+        const order = {
+          orderNumber,
+          timestamp: new Date().toISOString(),
+          items: cartItems.map(item => ({
+            id: item.id,
+            name: item.name,
+            description: item.description,
+            price: item.price,
+            quantity: item.quantity,
+            image: item.image,
+            restaurantId: item.restaurantId
+          })),
+          subtotal: finalSubtotal,
+          discount: finalDiscount,
+          deliveryFee,
+          tax: finalTax,
+          total: finalTotal,
+          promoCode: appliedPromo?.code || null,
+          deliveryInfo: {
+            name: formData.fullName,
+            email: formData.email,
+            phone: formData.phone,
+            address: formData.address,
+            city: formData.city,
+            state: formData.state,
+            zipCode: formData.zipCode
+          },
+          paymentMethod: formData.paymentMethod
+        };
+        
+        // Get existing orders and add new one
+        const orders = JSON.parse(localStorage.getItem("orders") || "[]");
+        orders.unshift(order); // Add to beginning
+        localStorage.setItem("orders", JSON.stringify(orders));
+        
+        clearCart();
+        setIsSubmitting(false);
         
         navigate("/order-confirmation", {
           state: {
-            orderNumber: `ORD-${Date.now()}`,
+            orderNumber,
             total: finalTotal,
             discount: finalDiscount,
             promoCode: appliedPromo?.code,

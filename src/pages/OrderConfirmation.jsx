@@ -65,9 +65,18 @@ const OrderConfirmation = () => {
         </div>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <Link
+            to={`/track-order`}
+            state={{ orderNumber }}
+            className="bg-[#db1020] text-white px-8 py-4 rounded-[16px] font-semibold text-lg hover:bg-[#c00e1d] transition duration-300 shadow-medium text-center min-h-[44px] flex items-center justify-center gap-2"
+            style={{ fontFamily: 'Inter, sans-serif' }}
+          >
+            <span className="material-symbols-outlined">delivery_dining</span>
+            Track Order
+          </Link>
           <button
             onClick={() => navigate("/restaurants")}
-            className="bg-[#db1020] text-white px-8 py-4 rounded-[16px] font-semibold text-lg hover:bg-[#c00e1d] transition duration-300 shadow-medium min-h-[44px]"
+            className="bg-white text-[#db1020] border-2 border-[#db1020] px-8 py-4 rounded-[16px] font-semibold text-lg hover:bg-[#ffd700] hover:text-[#1F1F1F] transition duration-300 shadow-soft min-h-[44px]"
             style={{ fontFamily: 'Inter, sans-serif' }}
           >
             Order Again

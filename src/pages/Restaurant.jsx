@@ -352,25 +352,26 @@ const Restaurant = () => {
             {currentRestaurants.map((restaurant) => {
               const averageRating = getAverageRating(restaurant.id, restaurant.rating);
               return (
-                <div key={restaurant.id} className="bg-white rounded-[16px] shadow-soft overflow-hidden hover:shadow-medium transition duration-300 flex flex-col h-full cursor-pointer">
+                <div key={restaurant.id} className="bg-white rounded-[16px] shadow-soft overflow-hidden hover:shadow-large transition-all duration-300 flex flex-col h-full cursor-pointer group">
                   <Link to={`/restaurants/${restaurant.id}`} className="block flex flex-col h-full">
-                    <div className="relative h-48 w-full overflow-hidden flex-shrink-0">
+                    <div className="relative h-48 w-full overflow-hidden flex-shrink-0 transform group-hover:-translate-y-2 group-hover:scale-[1.02] transition-transform duration-300">
                       <img
                         src={restaurant.image}
                         alt={restaurant.name}
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                         onError={(e) => {
                           e.target.src = "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800&h=600&fit=crop";
                         }}
                       />
-                      <div className="absolute top-3 right-3">
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                      <div className="absolute top-3 right-3 transform group-hover:scale-110 transition-transform duration-300">
                         <span className="bg-[#ffd700] text-[#1F1F1F] px-3 py-1 rounded-full text-sm font-semibold backdrop-blur-sm bg-opacity-95 shadow-soft" style={{ fontFamily: 'Inter, sans-serif' }}>
                           {restaurant.cuisine}
                         </span>
                       </div>
                     </div>
                     <div className="p-6 flex flex-col flex-grow">
-                      <h2 className="text-2xl font-semibold text-[#1F1F1F] mb-3 hover:text-[#db1020] transition" style={{ fontFamily: 'Poppins, sans-serif' }}>{restaurant.name}</h2>
+                      <h2 className="text-2xl font-semibold text-[#1F1F1F] mb-3 group-hover:text-[#db1020] transition-colors duration-300" style={{ fontFamily: 'Poppins, sans-serif' }}>{restaurant.name}</h2>
                       <p className="text-[#4A4A4A] mb-4 flex-grow line-clamp-3" style={{ fontFamily: 'Inter, sans-serif' }}>{restaurant.description}</p>
                     
                       <div className="mt-auto space-y-2">

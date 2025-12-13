@@ -87,6 +87,20 @@ const Navbar = () => {
             </nav>
 
             <div className="flex items-center space-x-4">
+              {/* Track Order Icon */}
+              <Link
+                to="/track-order"
+                className={`relative flex items-center justify-center px-3 py-2 rounded-[16px] transition-all duration-300 min-h-[44px] ${
+                  isActive("/track-order")
+                    ? "bg-[#db1020] text-white shadow-medium"
+                    : "text-[#db1020] hover:bg-[#ffd700] hover:text-[#1F1F1F] border border-[#db1020] bg-white"
+                }`}
+                style={{ fontFamily: 'Inter, sans-serif' }}
+                title="Track Order"
+              >
+                <span className="material-symbols-outlined">delivery_dining</span>
+              </Link>
+              
               <div
                 className="relative"
                 onMouseEnter={() => setShowCartDropdown(true)}
@@ -94,10 +108,10 @@ const Navbar = () => {
               >
                 <Link
                   to="/cart"
-                  className={`relative flex items-center justify-center px-3 py-2 rounded-[16px] transition min-h-[44px] ${
+                  className={`relative flex items-center justify-center px-3 py-2 rounded-[16px] transition-all duration-300 min-h-[44px] ${
                     isActive("/cart")
                       ? "bg-[#db1020] text-white shadow-medium"
-                      : "text-[#db1020] hover:bg-[#ffd700] hover:text-[#1F1F1F] border border-[#db1020]"
+                      : "text-[#db1020] hover:bg-[#ffd700] hover:text-[#1F1F1F] border border-[#db1020] bg-white"
                   }`}
                   style={{ fontFamily: 'Inter, sans-serif' }}
                 >
@@ -215,7 +229,11 @@ const Navbar = () => {
                 <>
                   <Link 
                     to="/login"  
-                    className="flex items-center justify-center px-3 py-2 border border-[#db1020] text-[#db1020] rounded-[16px] hover:bg-[#ffd700] hover:text-[#1F1F1F] transition min-h-[44px]"
+                    className={`flex items-center justify-center px-3 py-2 border border-[#db1020] rounded-[16px] transition-all duration-300 min-h-[44px] ${
+                      isActive("/login")
+                        ? "bg-[#db1020] text-white shadow-medium border-[#db1020]"
+                        : "text-[#db1020] hover:bg-[#ffd700] hover:text-[#1F1F1F] bg-white"
+                    }`}
                     style={{ fontFamily: 'Inter, sans-serif' }}
                     title="Login"
                   >
@@ -223,8 +241,12 @@ const Navbar = () => {
                   </Link>
 
                   <Link
-                    to= "/signup"
-                    className="flex items-center justify-center px-3 py-2 bg-[#db1020] text-white rounded-[16px] hover:bg-[#c00e1d] transition shadow-medium min-h-[44px]"
+                    to="/signup"
+                    className={`flex items-center justify-center px-3 py-2 rounded-[16px] transition-all duration-300 min-h-[44px] ${
+                      isActive("/signup")
+                        ? "bg-[#db1020] text-white shadow-medium"
+                        : "bg-white text-[#db1020] border border-[#db1020] hover:bg-[#ffd700] hover:text-[#1F1F1F]"
+                    }`}
                     style={{ fontFamily: 'Inter, sans-serif' }}
                     title="Sign Up"
                   >

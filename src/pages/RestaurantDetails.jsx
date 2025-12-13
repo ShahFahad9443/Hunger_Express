@@ -9,6 +9,8 @@ const RestaurantDetails = () => {
   const { addToCart } = useCart();
   const [showRatingModal, setShowRatingModal] = useState(false);
   const [ratingSubmitted, setRatingSubmitted] = useState(false);
+  const [showMenuItemRatingModal, setShowMenuItemRatingModal] = useState(null);
+  const [menuItemRatingSubmitted, setMenuItemRatingSubmitted] = useState(false);
   const [menuSearchQuery, setMenuSearchQuery] = useState("");
   const [priceRange, setPriceRange] = useState("All");
   const [sortBy, setSortBy] = useState("default");
@@ -130,6 +132,41 @@ const RestaurantDetails = () => {
     setTimeout(() => {
       setShowRatingModal(false);
       setRatingSubmitted(false);
+    }, 1500);
+  };
+
+  // Calculate average rating for a menu item
+  const getMenuItemAverageRating = (itemId, baseRating = 4.5) => {
+    const ratings = JSON.parse(localStorage.getItem("menuItemRatings") || "{}");
+    const itemRatings = ratings[itemId] || [];
+    
+    if (itemRatings.length === 0) {
+      return baseRating;
+    }
+    
+    const sum = itemRatings.reduce((acc, r) => acc + r.rating, 0);
+    const average = (sum + baseRating * 5) / (itemRatings.length + 5); // Weighted average
+    return average;
+  };
+
+  const handleMenuItemRating = (itemId, rating) => {
+    const ratings = JSON.parse(localStorage.getItem("menuItemRatings") || "{}");
+    const itemRatings = ratings[itemId] || [];
+    
+    const newRating = {
+      rating,
+      timestamp: new Date().toISOString(),
+    };
+    
+    itemRatings.push(newRating);
+    ratings[itemId] = itemRatings;
+    
+    localStorage.setItem("menuItemRatings", JSON.stringify(ratings));
+    setMenuItemRatingSubmitted(true);
+    
+    setTimeout(() => {
+      setShowMenuItemRatingModal(null);
+      setMenuItemRatingSubmitted(false);
     }, 1500);
   };
 
@@ -416,28 +453,52 @@ const RestaurantDetails = () => {
                 {filteredMenu.map((item) => {
                   const itemCategory = getItemCategory(item);
                   return (
-                    <div key={item.id} className="bg-white rounded-[16px] shadow-soft overflow-hidden hover:shadow-medium transition duration-300 flex flex-col">
-                      <div className="relative h-40 w-full overflow-hidden">
+                    <div key={item.id} className="bg-white rounded-[16px] shadow-soft overflow-hidden hover:shadow-large transition-all duration-300 flex flex-col group">
+                      <div className="relative h-40 w-full overflow-hidden transform group-hover:-translate-y-2 group-hover:scale-[1.02] transition-transform duration-300">
                         <img
                           src={item.image}
                           alt={item.name}
-                          className="w-full h-full object-cover"
+                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                           onError={(e) => {
                             e.target.src = "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800&h=600&fit=crop";
                           }}
                         />
-                        <div className="absolute top-3 right-3">
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                        <div className="absolute top-3 right-3 transform group-hover:scale-110 transition-transform duration-300">
                           <span className="bg-[#ffd700] text-[#1F1F1F] px-3 py-1 rounded-full text-xs font-semibold backdrop-blur-sm bg-opacity-95 shadow-soft" style={{ fontFamily: 'Inter, sans-serif' }}>
                             {itemCategory}
                           </span>
                         </div>
                       </div>
                       <div className="p-6 flex flex-col flex-grow">
-                        <h3 className="text-xl font-semibold text-[#1F1F1F] mb-2" style={{ fontFamily: 'Poppins, sans-serif' }}>{item.name}</h3>
-                        <p className="text-[#4A4A4A] mb-4 flex-grow text-sm" style={{ fontFamily: 'Inter, sans-serif' }}>{item.description}</p>
-                        <div className="flex justify-between items-center">
+                        <h3 className="text-xl font-semibold text-[#1F1F1F] mb-2 group-hover:text-[#db1020] transition-colors duration-300" style={{ fontFamily: 'Poppins, sans-serif' }}>{item.name}</h3>
+                        <p className="text-[#4A4A4A] mb-3 flex-grow text-sm" style={{ fontFamily: 'Inter, sans-serif' }}>{item.description}</p>
+                        
+                        {/* Rating Section */}
+                        <div className="flex items-center gap-3 mb-4">
+                          <StarRating 
+                            rating={getMenuItemAverageRating(item.id)} 
+                            size="sm" 
+                            interactive={false}
+                            showValue={true}
+                          />
+                          <button
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              setShowMenuItemRatingModal(item.id);
+                            }}
+                            className="text-[#db1020] hover:text-[#ffd700] text-xs font-semibold flex items-center gap-1 transition-colors duration-300"
+                            style={{ fontFamily: 'Inter, sans-serif' }}
+                          >
+                            <span className="material-symbols-outlined text-sm">rate_review</span>
+                            Rate
+                          </button>
+                        </div>
+
+                        <div className="flex justify-between items-center mt-auto">
                           <div className="flex flex-col">
-                            <span className="text-2xl font-bold text-[#db1020]" style={{ fontFamily: 'Poppins, sans-serif' }}>
+                            <span className="text-2xl font-bold text-[#db1020] group-hover:text-[#c00e1d] transition-colors duration-300" style={{ fontFamily: 'Poppins, sans-serif' }}>
                               ${item.price.toFixed(2)}
                             </span>
                             <span className="text-xs text-[#6B6B6B]" style={{ fontFamily: 'Inter, sans-serif' }}>
@@ -453,7 +514,7 @@ const RestaurantDetails = () => {
                               image: item.image,
                               restaurantId: restaurantId
                             })}
-                            className="bg-[#db1020] text-white px-6 py-3 rounded-[16px] font-semibold hover:bg-[#c00e1d] transition duration-300 shadow-medium min-h-[44px] flex items-center gap-2"
+                            className="bg-[#db1020] text-white px-6 py-3 rounded-[16px] font-semibold hover:bg-[#c00e1d] transition-all duration-300 shadow-medium hover:shadow-large hover:scale-105 min-h-[44px] flex items-center gap-2 transform"
                             style={{ fontFamily: 'Inter, sans-serif' }}
                           >
                             <span className="material-symbols-outlined">add_shopping_cart</span>
@@ -503,6 +564,51 @@ const RestaurantDetails = () => {
                   onClick={() => {
                     setShowRatingModal(false);
                     setRatingSubmitted(false);
+                  }}
+                  className="w-full bg-gray-200 text-[#1F1F1F] py-3 rounded-[16px] font-semibold hover:bg-gray-300 transition min-h-[44px]"
+                  style={{ fontFamily: 'Inter, sans-serif' }}
+                >
+                  Cancel
+                </button>
+              </>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Menu Item Rating Modal */}
+      {showMenuItemRatingModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-[16px] p-8 max-w-md w-full mx-4 shadow-large">
+            {menuItemRatingSubmitted ? (
+              <div className="text-center">
+                <div className="mb-4">
+                  <span className="material-symbols-outlined text-[#27742d] text-6xl">check_circle</span>
+                </div>
+                <h3 className="text-2xl font-semibold text-[#1F1F1F] mb-2" style={{ fontFamily: 'Poppins, sans-serif' }}>Thank You!</h3>
+                <p className="text-[#4A4A4A]" style={{ fontFamily: 'Inter, sans-serif' }}>Your rating has been submitted successfully.</p>
+              </div>
+            ) : (
+              <>
+                <h3 className="text-2xl font-semibold text-[#1F1F1F] mb-4" style={{ fontFamily: 'Poppins, sans-serif' }}>
+                  Rate {filteredMenu.find(item => item.id === showMenuItemRatingModal)?.name}
+                </h3>
+                <div className="flex justify-center mb-6">
+                  <StarRating
+                    rating={0}
+                    onRatingChange={(rating) => handleMenuItemRating(showMenuItemRatingModal, rating)}
+                    interactive={true}
+                    size="xl"
+                    showValue={true}
+                  />
+                </div>
+                <p className="text-[#4A4A4A] text-center mb-6" style={{ fontFamily: 'Inter, sans-serif' }}>
+                  Click on the stars to rate this menu item
+                </p>
+                <button
+                  onClick={() => {
+                    setShowMenuItemRatingModal(null);
+                    setMenuItemRatingSubmitted(false);
                   }}
                   className="w-full bg-gray-200 text-[#1F1F1F] py-3 rounded-[16px] font-semibold hover:bg-gray-300 transition min-h-[44px]"
                   style={{ fontFamily: 'Inter, sans-serif' }}
