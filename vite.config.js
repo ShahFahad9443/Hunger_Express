@@ -7,6 +7,7 @@ export default defineConfig({
   // Base path for GitHub Pages deployment
   base: process.env.NODE_ENV === 'production' ? '/Hunger_Express/' : '/',
   server: {
+    host: '0.0.0.0', // Listen on all network interfaces
     port: 3000,
     open: true
   },

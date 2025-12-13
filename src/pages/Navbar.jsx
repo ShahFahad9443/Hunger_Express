@@ -31,36 +31,36 @@ const Navbar = () => {
                 </li>
               
                 <li>
-                  <a
-                    href="#"
+                  <Link
+                    to="/restaurants"
                     className="text-gray-700 hover:text-pink-600 transition"
                   >
                     Restaurants
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a
-                    href="#"
+                  <Link
+                    to="/offers"
                     className="text-gray-700 hover:text-pink-600 transition"
                   >
                     Offers
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a
-                    href="#"
+                  <Link
+                    to="/about"
                     className="text-gray-700 hover:text-pink-600 transition"
                   >
                     About
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a
-                    href="#"
+                  <Link
+                    to="/contact"
                     className="text-gray-700 hover:text-pink-600 transition"
                   >
                     Contact
-                  </a>
+                  </Link>
                 </li>
               </ul>
             </nav>
