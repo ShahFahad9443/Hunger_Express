@@ -15,5 +15,13 @@ test.describe('Hunger Express Homepage', () => {
     const mainContent = page.locator('main, [role="main"], .app, #root');
     await expect(mainContent.first()).toBeVisible();
   });
+
+  test('should have a visible main content area 2', async ({ page }) => {
+    await page.goto('/');
+    
+    // Check if the main content area is visible
+    const mainContent = page.locator('main, [role="main"], .app, #root');
+    await expect(mainContent.first()).toBeVisible();
+  });
 });
 
