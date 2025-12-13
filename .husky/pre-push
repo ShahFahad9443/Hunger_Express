@@ -1,0 +1,15 @@
+#!/usr/bin/env sh
+. "$(dirname "$0")/_/husky.sh"
+
+# Auto-fix linting issues
+npm run lint:fix
+
+# Stage any files that were auto-fixed
+git add -u
+
+# If there are staged changes, amend the last commit
+if ! git diff --cached --quiet; then
+  echo "Linting fixes applied. Amending commit..."
+  git commit --amend --no-edit --no-verify
+fi
+
