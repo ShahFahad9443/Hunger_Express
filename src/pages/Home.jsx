@@ -1,12 +1,7 @@
-import { FaBeer } from "react-icons/fa";
-
 const Home = () => {
   return (
     <div className="home">
-      <h1>
-        Welcome to Hunger Express
-        <FaBeer />
-      </h1>
+      <h1>Welcome to Hunger Express</h1>
       <p>AI based Food Ordering and Delivery Web Application</p>
 
       <p>
