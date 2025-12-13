@@ -1,6 +1,6 @@
 ## Description
 
-<!-- Provide a brief description of what this PR does -->
+I have create a Navbar in which i addded the Login and Signup form through which user can login or create account 
 
 ## Type of Change
 
@@ -25,10 +25,10 @@ Related to #<!-- issue number -->
 
 ## Changes Made
 
-<!-- Describe the changes in detail -->
+Added Navbar to my project
 
 ### Frontend Changes
-- <!-- List frontend changes -->
+-Login and Sign Up from
 
 ### Backend Changes
 - <!-- List backend changes -->
