@@ -1,12 +1,21 @@
 import { useParams, Link } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useCart } from "../context/CartContext";
+import { useAuth } from "../context/AuthContext";
 import StarRating from "../components/StarRating";
-import { restaurants, menuItems } from "../utils/restaurantData";
+import restaurantService from "../services/restaurantService.js";
+import ratingService from "../services/ratingService.js";
+import LoadingSpinner from "../components/LoadingSpinner";
+import ErrorMessage from "../components/ErrorMessage";
 
 const RestaurantDetails = () => {
   const { id } = useParams();
   const { addToCart } = useCart();
+  const { user } = useAuth();
+  const [restaurant, setRestaurant] = useState(null);
+  const [menuItems, setMenuItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [showRatingModal, setShowRatingModal] = useState(false);
   const [ratingSubmitted, setRatingSubmitted] = useState(false);
   const [showMenuItemRatingModal, setShowMenuItemRatingModal] = useState(null);
@@ -17,8 +26,48 @@ const RestaurantDetails = () => {
   const [categoryFilter, setCategoryFilter] = useState("All");
 
   const restaurantId = parseInt(id, 10);
-  const restaurant = restaurants.find(r => r.id === restaurantId);
-  const allMenuItems = menuItems[restaurantId] || [];
+
+  // Load restaurant and menu data
+  useEffect(() => {
+    loadRestaurantData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id]);
+
+  const loadRestaurantData = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      console.log(`Loading restaurant data for ID: ${restaurantId}`);
+      
+      const [restaurantRes, menuRes] = await Promise.all([
+        restaurantService.getRestaurant(restaurantId),
+        restaurantService.getRestaurantMenu(restaurantId)
+      ]);
+
+      console.log('Restaurant response:', restaurantRes);
+      console.log('Menu response:', menuRes);
+
+      if (restaurantRes && restaurantRes.success) {
+        setRestaurant(restaurantRes.data);
+      } else {
+        setError(restaurantRes?.error || "Restaurant not found");
+        return;
+      }
+
+      if (menuRes && menuRes.success && Array.isArray(menuRes.data)) {
+        setMenuItems(menuRes.data);
+        console.log(`Loaded ${menuRes.data.length} menu items`);
+      } else {
+        console.warn('No menu items found or invalid response:', menuRes);
+        setMenuItems([]);
+      }
+    } catch (err) {
+      console.error('Error loading restaurant data:', err);
+      setError(err.message || "Failed to load restaurant data");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // Infer category from item name/description
   const getItemCategory = (item) => {
@@ -51,10 +100,10 @@ const RestaurantDetails = () => {
   };
 
   // Get unique categories
-  const categories = ["All", ...new Set(allMenuItems.map(item => getItemCategory(item)))];
+  const categories = ["All", ...new Set(menuItems.map(item => item.category || getItemCategory(item)))];
   
   // Filter and sort menu items
-  let filteredMenu = allMenuItems.filter(item => {
+  let filteredMenu = menuItems.filter(item => {
     // Search filter
     let matchesSearch = true;
     if (menuSearchQuery.trim()) {
@@ -100,100 +149,74 @@ const RestaurantDetails = () => {
     });
   }
 
-  // Calculate average rating
-  const getAverageRating = (restaurantId, baseRating) => {
-    const ratings = JSON.parse(localStorage.getItem("restaurantRatings") || "{}");
-    const restaurantRatings = ratings[restaurantId] || [];
-    
-    if (restaurantRatings.length === 0) {
-      return baseRating;
-    }
-    
-    const sum = restaurantRatings.reduce((acc, r) => acc + r.rating, 0);
-    const average = (sum + baseRating * 10) / (restaurantRatings.length + 10);
-    return average;
-  };
-
-  const handleRating = (rating) => {
-    const ratings = JSON.parse(localStorage.getItem("restaurantRatings") || "{}");
-    const restaurantRatings = ratings[restaurantId] || [];
-    
-    const newRating = {
-      rating,
-      timestamp: new Date().toISOString(),
-    };
-    
-    restaurantRatings.push(newRating);
-    ratings[restaurantId] = restaurantRatings;
-    
-    localStorage.setItem("restaurantRatings", JSON.stringify(ratings));
-    setRatingSubmitted(true);
-    
-    setTimeout(() => {
-      setShowRatingModal(false);
+  const handleRating = async (rating) => {
+    try {
+      await ratingService.rateRestaurant(restaurantId, rating, user?.id);
+      setRatingSubmitted(true);
+      await loadRestaurantData(); // Reload to get updated rating
+      
+      setTimeout(() => {
+        setShowRatingModal(false);
+        setRatingSubmitted(false);
+      }, 1500);
+    } catch (error) {
+      console.error("Failed to submit rating:", error);
       setRatingSubmitted(false);
-    }, 1500);
-  };
-
-  // Calculate average rating for a menu item
-  const getMenuItemAverageRating = (itemId, baseRating = 4.5) => {
-    const ratings = JSON.parse(localStorage.getItem("menuItemRatings") || "{}");
-    const itemRatings = ratings[itemId] || [];
-    
-    if (itemRatings.length === 0) {
-      return baseRating;
     }
-    
-    const sum = itemRatings.reduce((acc, r) => acc + r.rating, 0);
-    const average = (sum + baseRating * 5) / (itemRatings.length + 5); // Weighted average
-    return average;
   };
 
-  const handleMenuItemRating = (itemId, rating) => {
-    const ratings = JSON.parse(localStorage.getItem("menuItemRatings") || "{}");
-    const itemRatings = ratings[itemId] || [];
-    
-    const newRating = {
-      rating,
-      timestamp: new Date().toISOString(),
-    };
-    
-    itemRatings.push(newRating);
-    ratings[itemId] = itemRatings;
-    
-    localStorage.setItem("menuItemRatings", JSON.stringify(ratings));
-    setMenuItemRatingSubmitted(true);
-    
-    setTimeout(() => {
-      setShowMenuItemRatingModal(null);
+  const handleMenuItemRating = async (itemId, rating) => {
+    try {
+      await ratingService.rateMenuItem(itemId, rating, user?.id);
+      setMenuItemRatingSubmitted(true);
+      await loadRestaurantData(); // Reload to get updated rating
+      
+      setTimeout(() => {
+        setShowMenuItemRatingModal(null);
+        setMenuItemRatingSubmitted(false);
+      }, 1500);
+    } catch (error) {
+      console.error("Failed to submit rating:", error);
       setMenuItemRatingSubmitted(false);
-    }, 1500);
+    }
   };
 
-  if (!restaurant) {
+  if (loading) {
     return (
-      <div className="container mx-auto px-4 py-16 mt-20 text-center">
-        <h2 className="text-3xl font-bold text-[#1F1F1F] mb-4" style={{ fontFamily: 'Poppins, sans-serif' }}>Restaurant Not Found</h2>
-        <p className="text-[#4A4A4A] mb-6" style={{ fontFamily: 'Inter, sans-serif' }}>The restaurant you&apos;re looking for doesn&apos;t exist.</p>
-        <Link
-          to="/restaurants"
-          className="inline-block bg-[#db1020] text-white px-6 py-3 rounded-[16px] font-semibold hover:bg-[#c00e1d] transition duration-300 shadow-medium min-h-[44px]"
-          style={{ fontFamily: 'Inter, sans-serif' }}
-        >
-          Back to Restaurants
-        </Link>
+      <div className="container mx-auto px-4 py-6 flex justify-center items-center min-h-[60vh]">
+        <LoadingSpinner size="lg" text="Loading restaurant..." />
       </div>
     );
   }
 
-  const averageRating = getAverageRating(restaurant.id, restaurant.rating);
+  if (error || !restaurant) {
+    return (
+      <div className="container mx-auto px-4 py-6">
+        <ErrorMessage 
+          message={error || "Restaurant not found"} 
+          onRetry={loadRestaurantData}
+        />
+        <div className="text-center mt-6">
+          <Link
+            to="/restaurants"
+            className="inline-block bg-[#db1020] text-white px-6 py-3 rounded-[16px] font-semibold hover:bg-[#c00e1d] transition duration-300 shadow-medium min-h-[44px]"
+            style={{ fontFamily: 'Inter, sans-serif' }}
+          >
+            Back to Restaurants
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
+  const averageRating = parseFloat(restaurant.rating || 0);
 
   return (
-    <div className="mt-20">
+    <div>
       {/* Hero Section with Restaurant Image */}
       <div className="relative h-64 md:h-96 w-full overflow-hidden">
         <img
-          src={restaurant.image}
+          src={restaurant.image_url || restaurant.image}
           alt={restaurant.name}
           className="w-full h-full object-cover"
           onError={(e) => {
@@ -260,7 +283,7 @@ const RestaurantDetails = () => {
                   <span className="material-symbols-outlined text-[#db1020] text-2xl">attach_money</span>
                   <p className="text-sm text-[#6B6B6B] font-semibold" style={{ fontFamily: 'Inter, sans-serif' }}>Avg. Price</p>
                 </div>
-                <p className="font-semibold text-[#1F1F1F] text-lg" style={{ fontFamily: 'Poppins, sans-serif' }}>${restaurant.price.toFixed(2)}</p>
+                <p className="font-semibold text-[#1F1F1F] text-lg" style={{ fontFamily: 'Poppins, sans-serif' }}>${parseFloat(restaurant.price_range || restaurant.price || 0).toFixed(2)}</p>
               </div>
               
               <div className="bg-[#f9f5f5] rounded-[16px] p-4 shadow-soft">
@@ -302,7 +325,7 @@ const RestaurantDetails = () => {
                   <span className="material-symbols-outlined text-[#db1020]">shopping_bag</span>
                   <p className="text-sm text-[#6B6B6B] font-semibold" style={{ fontFamily: 'Inter, sans-serif' }}>Menu Items</p>
                 </div>
-                <p className="font-semibold text-[#1F1F1F] text-lg" style={{ fontFamily: 'Poppins, sans-serif' }}>{allMenuItems.length} items</p>
+                <p className="font-semibold text-[#1F1F1F] text-lg" style={{ fontFamily: 'Poppins, sans-serif' }}>{menuItems.length} items</p>
               </div>
             </div>
           </div>
@@ -456,7 +479,7 @@ const RestaurantDetails = () => {
                     <div key={item.id} className="bg-white rounded-[16px] shadow-soft overflow-hidden hover:shadow-large transition-all duration-300 flex flex-col group">
                       <div className="relative h-40 w-full overflow-hidden transform group-hover:-translate-y-2 group-hover:scale-[1.02] transition-transform duration-300">
                         <img
-                          src={item.image}
+                          src={item.image_url || item.image}
                           alt={item.name}
                           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                           onError={(e) => {
@@ -466,18 +489,18 @@ const RestaurantDetails = () => {
                         <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                         <div className="absolute top-3 right-3 transform group-hover:scale-110 transition-transform duration-300">
                           <span className="bg-[#ffd700] text-[#1F1F1F] px-3 py-1 rounded-full text-xs font-semibold backdrop-blur-sm bg-opacity-95 shadow-soft" style={{ fontFamily: 'Inter, sans-serif' }}>
-                            {itemCategory}
+                            {item.category || itemCategory}
                           </span>
                         </div>
                       </div>
                       <div className="p-6 flex flex-col flex-grow">
                         <h3 className="text-xl font-semibold text-[#1F1F1F] mb-2 group-hover:text-[#db1020] transition-colors duration-300" style={{ fontFamily: 'Poppins, sans-serif' }}>{item.name}</h3>
-                        <p className="text-[#4A4A4A] mb-3 flex-grow text-sm" style={{ fontFamily: 'Inter, sans-serif' }}>{item.description}</p>
+                        <p className="text-[#4A4A4A] mb-3 flex-grow text-sm" style={{ fontFamily: 'Inter, sans-serif' }}>{item.description || ''}</p>
                         
                         {/* Rating Section */}
                         <div className="flex items-center gap-3 mb-4">
                           <StarRating 
-                            rating={getMenuItemAverageRating(item.id)} 
+                            rating={parseFloat(item.rating || 4.5)} 
                             size="sm" 
                             interactive={false}
                             showValue={true}
@@ -499,7 +522,7 @@ const RestaurantDetails = () => {
                         <div className="flex justify-between items-center mt-auto">
                           <div className="flex flex-col">
                             <span className="text-2xl font-bold text-[#db1020] group-hover:text-[#c00e1d] transition-colors duration-300" style={{ fontFamily: 'Poppins, sans-serif' }}>
-                              ${item.price.toFixed(2)}
+                              ${parseFloat(item.price).toFixed(2)}
                             </span>
                             <span className="text-xs text-[#6B6B6B]" style={{ fontFamily: 'Inter, sans-serif' }}>
                               {itemCategory}
@@ -510,8 +533,8 @@ const RestaurantDetails = () => {
                               id: item.id,
                               name: item.name,
                               description: item.description,
-                              price: item.price,
-                              image: item.image,
+                              price: parseFloat(item.price),
+                              image: item.image_url || item.image,
                               restaurantId: restaurantId
                             })}
                             className="bg-[#db1020] text-white px-6 py-3 rounded-[16px] font-semibold hover:bg-[#c00e1d] transition-all duration-300 shadow-medium hover:shadow-large hover:scale-105 min-h-[44px] flex items-center gap-2 transform"

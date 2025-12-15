@@ -1,1 +1,12 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Run lint:fix to automatically fix linting errors
+npm run lint:fix
+
+# Stage the fixed files (if any were fixed)
+git add -u
+
+# Run lint check to ensure no remaining errors
+# If there are unfixable errors, the commit will be blocked
 npm run lint

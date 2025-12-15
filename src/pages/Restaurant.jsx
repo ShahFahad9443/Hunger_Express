@@ -1,9 +1,18 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import StarRating from "../components/StarRating";
-import { restaurants as allRestaurants } from "../utils/restaurantData";
+import restaurantService from "../services/restaurantService.js";
+import ratingService from "../services/ratingService.js";
+import { useAuth } from "../context/AuthContext";
+import LoadingSpinner from "../components/LoadingSpinner";
+import ErrorMessage from "../components/ErrorMessage";
 
 const Restaurant = () => {
+  const location = useLocation();
+  const { user } = useAuth();
+  const [restaurants, setRestaurants] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [selectedCuisine, setSelectedCuisine] = useState("All");
   const [selectedLocation, setSelectedLocation] = useState("All");
   const [priceRange, setPriceRange] = useState("All");
@@ -15,49 +24,61 @@ const Restaurant = () => {
   const [showRatingModal, setShowRatingModal] = useState(null);
   const [ratingSubmitted, setRatingSubmitted] = useState(false);
 
+  // Load restaurants from API
+  useEffect(() => {
+    loadRestaurants();
+  }, [location.pathname, location.state]);
+
+  const loadRestaurants = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      console.log('Loading restaurants from API...');
+      const response = await restaurantService.getRestaurants();
+      console.log('API Response:', response);
+      
+      if (response && response.success) {
+        if (response.data && Array.isArray(response.data)) {
+          console.log(`Loaded ${response.data.length} restaurants`);
+          setRestaurants(response.data);
+        } else {
+          console.error('Invalid data format:', response);
+          setError("Invalid data format received from server");
+        }
+      } else {
+        console.error('API returned error:', response);
+        setError(response?.error || "Failed to load restaurants");
+      }
+    } catch (err) {
+      console.error('Error loading restaurants:', err);
+      setError(err.message || "Failed to load restaurants. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   // Reset to page 1 when filter or search changes
   useEffect(() => {
     setCurrentPage(1);
   }, [selectedCuisine, selectedLocation, priceRange, minRating, sortBy, searchQuery]);
 
-  // Calculate average rating for a restaurant
-  const getAverageRating = (restaurantId, baseRating) => {
-    const ratings = JSON.parse(localStorage.getItem("restaurantRatings") || "{}");
-    const restaurantRatings = ratings[restaurantId] || [];
-    
-    if (restaurantRatings.length === 0) {
-      return baseRating;
-    }
-    
-    const sum = restaurantRatings.reduce((acc, r) => acc + r.rating, 0);
-    const average = (sum + baseRating * 10) / (restaurantRatings.length + 10); // Weighted average
-    return average;
-  };
-
-  const handleRating = (restaurantId, rating) => {
-    const ratings = JSON.parse(localStorage.getItem("restaurantRatings") || "{}");
-    const restaurantRatings = ratings[restaurantId] || [];
-    
-    // Add new rating
-    const newRating = {
-      rating,
-      timestamp: new Date().toISOString(),
-    };
-    
-    restaurantRatings.push(newRating);
-    ratings[restaurantId] = restaurantRatings;
-    
-    localStorage.setItem("restaurantRatings", JSON.stringify(ratings));
-    setRatingSubmitted(true);
-    
-    // Close modal after 1.5 seconds
-    setTimeout(() => {
-      setShowRatingModal(null);
+  const handleRating = async (restaurantId, rating) => {
+    try {
+      await ratingService.rateRestaurant(restaurantId, rating, user?.id);
+      setRatingSubmitted(true);
+      
+      // Reload restaurants to get updated ratings
+      await loadRestaurants();
+      
+      setTimeout(() => {
+        setShowRatingModal(null);
+        setRatingSubmitted(false);
+      }, 1500);
+    } catch (error) {
+      console.error("Failed to submit rating:", error);
       setRatingSubmitted(false);
-    }, 1500);
+    }
   };
-
-  const restaurants = allRestaurants;
 
   const cuisines = ["All", ...new Set(restaurants.map(r => r.cuisine))];
   const locations = ["All", ...new Set(restaurants.map(r => r.location))];
@@ -70,18 +91,19 @@ const Restaurant = () => {
     // Price range filter
     let matchesPrice = true;
     if (priceRange !== "All") {
+      const price = parseFloat(r.price_range || r.price);
       if (priceRange === "Budget") {
-        matchesPrice = r.price < 15;
+        matchesPrice = price < 15;
       } else if (priceRange === "Moderate") {
-        matchesPrice = r.price >= 15 && r.price < 25;
+        matchesPrice = price >= 15 && price < 25;
       } else if (priceRange === "Expensive") {
-        matchesPrice = r.price >= 25;
+        matchesPrice = price >= 25;
       }
     }
     
     // Minimum rating filter
-    const averageRating = getAverageRating(r.id, r.rating);
-    const matchesRating = minRating === "All" || averageRating >= parseFloat(minRating);
+    const rating = parseFloat(r.rating || 0);
+    const matchesRating = minRating === "All" || rating >= parseFloat(minRating);
     
     // Search query filter
     let matchesSearch = true;
@@ -90,7 +112,7 @@ const Restaurant = () => {
       matchesSearch = 
         r.name.toLowerCase().includes(lowerQuery) ||
         r.cuisine.toLowerCase().includes(lowerQuery) ||
-        r.description.toLowerCase().includes(lowerQuery) ||
+        (r.description && r.description.toLowerCase().includes(lowerQuery)) ||
         r.location.toLowerCase().includes(lowerQuery);
     }
     
@@ -100,8 +122,10 @@ const Restaurant = () => {
   // Sort restaurants
   if (sortBy !== "default") {
     filteredRestaurants = [...filteredRestaurants].sort((a, b) => {
-      const ratingA = getAverageRating(a.id, a.rating);
-      const ratingB = getAverageRating(b.id, b.rating);
+      const ratingA = parseFloat(a.rating || 0);
+      const ratingB = parseFloat(b.rating || 0);
+      const priceA = parseFloat(a.price_range || a.price || 0);
+      const priceB = parseFloat(b.price_range || b.price || 0);
       
       switch (sortBy) {
         case "rating-high":
@@ -109,9 +133,9 @@ const Restaurant = () => {
         case "rating-low":
           return ratingA - ratingB;
         case "price-low":
-          return a.price - b.price;
+          return priceA - priceB;
         case "price-high":
-          return b.price - a.price;
+          return priceB - priceA;
         case "name-asc":
           return a.name.localeCompare(b.name);
         case "name-desc":
@@ -138,28 +162,23 @@ const Restaurant = () => {
     const maxVisiblePages = 5;
     
     if (totalPages <= maxVisiblePages) {
-      // Show all pages if total pages is less than max visible
       for (let i = 1; i <= totalPages; i++) {
         pages.push(i);
       }
     } else {
-      // Show pages with ellipsis
       if (currentPage <= 3) {
-        // Show first 3 pages, ellipsis, and last page
         for (let i = 1; i <= 3; i++) {
           pages.push(i);
         }
         pages.push('ellipsis');
         pages.push(totalPages);
       } else if (currentPage >= totalPages - 2) {
-        // Show first page, ellipsis, and last 3 pages
         pages.push(1);
         pages.push('ellipsis');
         for (let i = totalPages - 2; i <= totalPages; i++) {
           pages.push(i);
         }
       } else {
-        // Show first page, ellipsis, current-1, current, current+1, ellipsis, last page
         pages.push(1);
         pages.push('ellipsis');
         pages.push(currentPage - 1);
@@ -172,8 +191,24 @@ const Restaurant = () => {
     return pages;
   };
 
+  if (loading) {
+    return (
+      <div className="container mx-auto px-4 py-6 flex justify-center items-center min-h-[60vh]">
+        <LoadingSpinner size="lg" text="Loading restaurants..." />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="container mx-auto px-4 py-6">
+        <ErrorMessage message={error} onRetry={loadRestaurants} />
+      </div>
+    );
+  }
+
   return (
-    <div className="container mx-auto px-4 py-8 mt-20">
+    <div className="container mx-auto px-4 py-6">
       <div className="mb-8">
         <h1 className="text-4xl font-bold text-[#db1020] mb-6 text-center" style={{ fontFamily: 'Poppins, sans-serif' }}>Our Restaurants</h1>
         
@@ -201,7 +236,7 @@ const Restaurant = () => {
           </div>
         </div>
 
-        {/* Filters Section */}
+        {/* Filters Section - Same as before */}
         <div className="bg-[#f9f5f5] rounded-[16px] p-6 shadow-soft mb-6">
           <div className="flex flex-wrap items-center justify-center gap-4">
             {/* Cuisine Filter */}
@@ -350,13 +385,13 @@ const Restaurant = () => {
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8 items-stretch">
             {currentRestaurants.map((restaurant) => {
-              const averageRating = getAverageRating(restaurant.id, restaurant.rating);
+              const rating = parseFloat(restaurant.rating || 0);
               return (
                 <div key={restaurant.id} className="bg-white rounded-[16px] shadow-soft overflow-hidden hover:shadow-large transition-all duration-300 flex flex-col h-full cursor-pointer group">
                   <Link to={`/restaurants/${restaurant.id}`} className="block flex flex-col h-full">
                     <div className="relative h-48 w-full overflow-hidden flex-shrink-0 transform group-hover:-translate-y-2 group-hover:scale-[1.02] transition-transform duration-300">
                       <img
-                        src={restaurant.image}
+                        src={restaurant.image_url || restaurant.image}
                         alt={restaurant.name}
                         className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                         onError={(e) => {
@@ -377,7 +412,7 @@ const Restaurant = () => {
                       <div className="mt-auto space-y-2">
                         <div className="flex items-center justify-between">
                           <StarRating 
-                            rating={averageRating} 
+                            rating={rating} 
                             size="sm" 
                             interactive={false}
                             showValue={true}
@@ -451,11 +486,10 @@ const Restaurant = () => {
             </div>
           )}
 
-          {/* Pagination Controls */}
+          {/* Pagination Controls - Same as before */}
           {totalPages > 1 && (
             <div className="flex flex-col items-center gap-4 mt-8">
               <div className="flex items-center gap-2">
-                {/* Previous Button */}
                 <button
                   onClick={() => handlePageChange(currentPage - 1)}
                   disabled={currentPage === 1}
@@ -469,7 +503,6 @@ const Restaurant = () => {
                   <span className="material-symbols-outlined">chevron_left</span>
                 </button>
 
-                {/* Page Numbers */}
                 <div className="flex items-center gap-1">
                   {getPageNumbers().map((page, index) => {
                     if (page === 'ellipsis') {
@@ -496,7 +529,6 @@ const Restaurant = () => {
                   })}
                 </div>
 
-                {/* Next Button */}
                 <button
                   onClick={() => handlePageChange(currentPage + 1)}
                   disabled={currentPage === totalPages}
@@ -523,4 +555,3 @@ const Restaurant = () => {
 };
 
 export default Restaurant;
-

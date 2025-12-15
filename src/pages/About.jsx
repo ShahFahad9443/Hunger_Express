@@ -1,6 +1,6 @@
 const About = () => {
   return (
-    <div className="mt-20">
+    <div>
       {/* Hero Section */}
       <div className="bg-gradient-to-r from-[#db1020] to-[#c00e1d] text-white py-16">
         <div className="container mx-auto px-4">

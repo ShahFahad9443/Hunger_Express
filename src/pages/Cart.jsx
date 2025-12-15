@@ -26,7 +26,7 @@ const Cart = () => {
 
   if (cartItems.length === 0) {
     return (
-      <div className="container mx-auto px-4 py-8 mt-20">
+      <div className="container mx-auto px-4 py-6">
         <div className="max-w-2xl mx-auto text-center">
           <div className="text-6xl mb-6">🛒</div>
           <h1 className="text-4xl font-bold text-[#db1020] mb-4" style={{ fontFamily: 'Poppins, sans-serif' }}>Your Cart is Empty</h1>
@@ -117,7 +117,7 @@ const Cart = () => {
   const total = subtotal - discount + deliveryFee + tax;
 
   return (
-    <div className="container mx-auto px-4 py-8 mt-20">
+    <div className="container mx-auto px-4 py-8">
       <div className="flex justify-between items-center mb-8">
           <h1 className="text-4xl font-bold text-[#db1020]" style={{ fontFamily: 'Poppins, sans-serif' }}>Shopping Cart</h1>
         {cartItems.length > 0 && (

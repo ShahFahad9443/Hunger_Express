@@ -1,6 +1,6 @@
 const Offers = () => {
   return (
-    <div className="container mx-auto px-4 py-8 mt-20">
+    <div className="container mx-auto px-4 py-6">
       <h1 className="text-4xl font-bold text-[#db1020] mb-6" style={{ fontFamily: 'Poppins, sans-serif' }}>Special Offers & Deals</h1>
       
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">

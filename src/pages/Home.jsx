@@ -1,47 +1,41 @@
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
 import StarRating from "../components/StarRating";
+import restaurantService from "../services/restaurantService.js";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 const Home = () => {
-  // Popular restaurants data (first 3 from restaurants page)
-  const popularRestaurants = [
-    {
-      id: 1,
-      name: "Italian Bistro",
-      cuisine: "Italian",
-      description: "Authentic Italian cuisine with handcrafted pasta and wood-fired pizzas.",
-      rating: 4.8,
-      image: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=800&h=600&fit=crop"
-    },
-    {
-      id: 2,
-      name: "Asian Fusion",
-      cuisine: "Asian",
-      description: "Perfect blend of Asian flavors featuring sushi, ramen, and stir-fries.",
-      rating: 4.9,
-      image: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=800&h=600&fit=crop"
-    },
-    {
-      id: 3,
-      name: "Burger House",
-      cuisine: "American",
-      description: "Juicy, flame-grilled burgers with premium beef and signature sauces.",
-      rating: 4.7,
-      image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=800&h=600&fit=crop"
-    }
-  ];
+  const location = useLocation();
+  const [popularRestaurants, setPopularRestaurants] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  // Calculate average rating (same logic as Restaurant page)
-  const getAverageRating = (restaurantId, baseRating) => {
-    const ratings = JSON.parse(localStorage.getItem("restaurantRatings") || "{}");
-    const restaurantRatings = ratings[restaurantId] || [];
-    
-    if (restaurantRatings.length === 0) {
-      return baseRating;
+  useEffect(() => {
+    loadPopularRestaurants();
+  }, [location.pathname, location.state]);
+
+  const loadPopularRestaurants = async () => {
+    try {
+      setLoading(true);
+      console.log('Loading popular restaurants from API...');
+      const response = await restaurantService.getRestaurants({ minRating: 4.5 });
+      console.log('Popular restaurants API Response:', response);
+      
+      if (response && response.success && response.data && Array.isArray(response.data)) {
+        // Get top 3 by rating
+        const sorted = response.data.sort((a, b) => parseFloat(b.rating || 0) - parseFloat(a.rating || 0));
+        setPopularRestaurants(sorted.slice(0, 3));
+        console.log(`Loaded ${sorted.slice(0, 3).length} popular restaurants`);
+      } else {
+        console.warn('No popular restaurants found or invalid response:', response);
+        setPopularRestaurants([]);
+      }
+    } catch (error) {
+      console.error("Failed to load restaurants:", error);
+      // Fallback to empty array
+      setPopularRestaurants([]);
+    } finally {
+      setLoading(false);
     }
-    
-    const sum = restaurantRatings.reduce((acc, r) => acc + r.rating, 0);
-    const average = (sum + baseRating * 10) / (restaurantRatings.length + 10);
-    return average;
   };
 
   return (
@@ -103,196 +97,105 @@ const Home = () => {
                 Choose from hundreds of restaurants offering cuisines from around 
                 the world, all in one place.
               </p>
+              <div className="mt-4 inline-block bg-[#db1020] text-white px-4 py-2 rounded-full text-sm font-semibold transform group-hover:scale-110 transition-transform duration-300 shadow-soft group-hover:shadow-medium" style={{ fontFamily: 'Inter, sans-serif' }}>
+                ✓ 100+ Restaurants
+              </div>
             </div>
 
             <div className="bg-white rounded-[16px] shadow-soft p-8 text-center hover:shadow-large transition-all duration-300 border-2 border-transparent hover:border-[#ffd700] transform hover:-translate-y-2 hover:scale-[1.02] group cursor-pointer">
               <div className="text-5xl mb-4 transform group-hover:scale-110 group-hover:rotate-12 transition-transform duration-300">💳</div>
               <h3 className="text-2xl font-semibold text-[#1F1F1F] mb-3 group-hover:text-[#ffd700] transition-colors duration-300" style={{ fontFamily: 'Poppins, sans-serif' }}>Easy Payment</h3>
               <p className="text-[#4A4A4A] group-hover:text-[#1F1F1F] transition-colors duration-300" style={{ fontFamily: 'Inter, sans-serif' }}>
-                Multiple payment options including cards, digital wallets, and cash 
-                on delivery for your convenience.
+                Pay securely with your preferred method. We accept cards, cash on 
+                delivery, and digital wallets.
               </p>
+              <div className="mt-4 inline-block bg-[#ffd700] text-[#1F1F1F] px-4 py-2 rounded-full text-sm font-semibold transform group-hover:scale-110 transition-transform duration-300 shadow-soft group-hover:shadow-medium" style={{ fontFamily: 'Inter, sans-serif' }}>
+                ✓ Secure Payment
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Popular Restaurants Preview */}
+      {/* Popular Restaurants Section */}
       <section className="py-16 bg-white">
         <div className="container mx-auto px-4">
-          <div className="flex justify-between items-center mb-8">
-            <h2 className="text-4xl font-bold text-[#1F1F1F]" style={{ fontFamily: 'Poppins, sans-serif' }}>Popular Restaurants</h2>
-            <Link
-              to="/restaurants"
-              className="text-[#db1020] font-semibold hover:text-[#ffd700] transition"
-              style={{ fontFamily: 'Inter, sans-serif' }}
-            >
-              View All →
-            </Link>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {popularRestaurants.map((restaurant) => {
-              const averageRating = getAverageRating(restaurant.id, restaurant.rating);
-              return (
-                <Link
-                  key={restaurant.id}
-                  to={`/restaurants/${restaurant.id}`}
-                  className="bg-white rounded-[16px] shadow-soft overflow-hidden hover:shadow-large transition-all duration-300 flex flex-col cursor-pointer group"
-                >
-                  <div className="relative h-48 w-full overflow-hidden transform group-hover:-translate-y-2 group-hover:scale-[1.02] transition-transform duration-300">
-                    <img
-                      src={restaurant.image}
-                      alt={restaurant.name}
-                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                      onError={(e) => {
-                        e.target.src = "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800&h=600&fit=crop";
-                      }}
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                    <div className="absolute top-3 right-3 transform group-hover:scale-110 transition-transform duration-300">
-                      <span className="bg-[#ffd700] text-[#1F1F1F] px-3 py-1 rounded-full text-sm font-semibold backdrop-blur-sm bg-opacity-95 shadow-soft" style={{ fontFamily: 'Inter, sans-serif' }}>
-                        {restaurant.cuisine}
-                      </span>
-                    </div>
-                  </div>
-                  <div className="p-6 flex flex-col flex-grow">
-                    <h3 className="text-2xl font-semibold text-[#1F1F1F] mb-3 group-hover:text-[#db1020] transition-colors duration-300" style={{ fontFamily: 'Poppins, sans-serif' }}>{restaurant.name}</h3>
-                    <p className="text-[#4A4A4A] mb-4 flex-grow" style={{ fontFamily: 'Inter, sans-serif' }}>
-                      {restaurant.description}
-                    </p>
-                    <div className="flex items-center justify-between">
-                      <StarRating 
-                        rating={averageRating} 
-                        size="sm" 
-                        interactive={false}
-                        showValue={true}
+          <h2 className="text-4xl font-bold text-center text-[#1F1F1F] mb-12" style={{ fontFamily: 'Poppins, sans-serif' }}>
+            Popular Restaurants
+          </h2>
+          {loading ? (
+            <div className="flex justify-center py-12">
+              <LoadingSpinner size="lg" text="Loading restaurants..." />
+            </div>
+          ) : popularRestaurants.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {popularRestaurants.map((restaurant) => {
+                const rating = parseFloat(restaurant.rating || 0);
+                return (
+                  <Link
+                    key={restaurant.id}
+                    to={`/restaurants/${restaurant.id}`}
+                    className="bg-white rounded-[16px] shadow-soft overflow-hidden hover:shadow-large transition-all duration-300 transform hover:-translate-y-2 group"
+                  >
+                    <div className="relative h-48 w-full overflow-hidden">
+                      <img
+                        src={restaurant.image_url || restaurant.image}
+                        alt={restaurant.name}
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                        onError={(e) => {
+                          e.target.src = "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800&h=600&fit=crop";
+                        }}
                       />
-                      <span className="bg-[#27742d] text-white px-3 py-1 rounded-full text-sm font-semibold shadow-soft" style={{ fontFamily: 'Inter, sans-serif' }}>30-45 min</span>
+                      <div className="absolute top-3 right-3">
+                        <span className="bg-[#ffd700] text-[#1F1F1F] px-3 py-1 rounded-full text-sm font-semibold backdrop-blur-sm bg-opacity-95 shadow-soft" style={{ fontFamily: 'Inter, sans-serif' }}>
+                          {restaurant.cuisine}
+                        </span>
+                      </div>
                     </div>
-                  </div>
-                </Link>
-              );
-            })}
-          </div>
+                    <div className="p-6">
+                      <h3 className="text-2xl font-semibold text-[#1F1F1F] mb-3 group-hover:text-[#db1020] transition-colors duration-300" style={{ fontFamily: 'Poppins, sans-serif' }}>
+                        {restaurant.name}
+                      </h3>
+                      <p className="text-[#4A4A4A] mb-4 line-clamp-2" style={{ fontFamily: 'Inter, sans-serif' }}>
+                        {restaurant.description}
+                      </p>
+                      <div className="flex items-center gap-2">
+                        <StarRating 
+                          rating={rating} 
+                          size="sm" 
+                          interactive={false}
+                          showValue={true}
+                        />
+                      </div>
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
+          ) : (
+            <div className="text-center py-12">
+              <p className="text-[#4A4A4A]" style={{ fontFamily: 'Inter, sans-serif' }}>
+                No restaurants available at the moment.
+              </p>
+            </div>
+          )}
         </div>
       </section>
 
       {/* Special Offers Banner */}
       <section className="py-16 bg-gradient-to-r from-[#ffd700] to-[#ffed4e]">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto text-center text-[#1F1F1F]">
+        <div className="container mx-auto px-4 text-center">
+          <div className="max-w-2xl mx-auto">
             <h2 className="text-4xl font-bold mb-4" style={{ fontFamily: 'Poppins, sans-serif' }}>🎉 Special Weekend Offer!</h2>
-            <p className="text-xl mb-6" style={{ fontFamily: 'Inter, sans-serif' }}>
-              Get 30% OFF on your first order. Use code <span className="font-bold text-2xl">FIRST30</span> at checkout
+            <p className="text-xl mb-6 text-[#1F1F1F]" style={{ fontFamily: 'Inter, sans-serif' }}>
+              Get 20% off on all orders this weekend. Use code <strong>WEEKEND20</strong> at checkout!
             </p>
             <Link
               to="/offers"
-              className="inline-block bg-[#db1020] text-white px-8 py-4 rounded-[16px] font-semibold text-lg hover:bg-[#c00e1d] transition duration-300 shadow-medium min-h-[44px] flex items-center justify-center mx-auto"
+              className="inline-block bg-[#db1020] text-white px-8 py-4 rounded-[16px] font-semibold text-lg hover:bg-[#c00e1d] transition duration-300 shadow-medium min-h-[44px]"
               style={{ fontFamily: 'Inter, sans-serif' }}
             >
               View All Offers
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* How It Works */}
-      <section className="py-16 bg-[#f9f5f5]">
-        <div className="container mx-auto px-4">
-          <h2 className="text-4xl font-bold text-center text-[#1F1F1F] mb-12" style={{ fontFamily: 'Poppins, sans-serif' }}>
-            How It Works
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 max-w-5xl mx-auto">
-            <div className="text-center">
-              <div className="bg-[#db1020] text-white w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4 shadow-medium" style={{ fontFamily: 'Poppins, sans-serif' }}>
-                1
-              </div>
-              <h3 className="text-xl font-semibold text-[#1F1F1F] mb-2" style={{ fontFamily: 'Poppins, sans-serif' }}>Choose Restaurant</h3>
-              <p className="text-[#4A4A4A]" style={{ fontFamily: 'Inter, sans-serif' }}>
-                Browse through our wide selection of restaurants and cuisines
-              </p>
-            </div>
-
-            <div className="text-center">
-              <div className="bg-[#db1020] text-white w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4 shadow-medium" style={{ fontFamily: 'Poppins, sans-serif' }}>
-                2
-              </div>
-              <h3 className="text-xl font-semibold text-[#1F1F1F] mb-2" style={{ fontFamily: 'Poppins, sans-serif' }}>Select Food</h3>
-              <p className="text-[#4A4A4A]" style={{ fontFamily: 'Inter, sans-serif' }}>
-                Pick your favorite dishes from the menu and add to cart
-              </p>
-            </div>
-
-            <div className="text-center">
-              <div className="bg-[#db1020] text-white w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4 shadow-medium" style={{ fontFamily: 'Poppins, sans-serif' }}>
-                3
-              </div>
-              <h3 className="text-xl font-semibold text-[#1F1F1F] mb-2" style={{ fontFamily: 'Poppins, sans-serif' }}>Place Order</h3>
-              <p className="text-[#4A4A4A]" style={{ fontFamily: 'Inter, sans-serif' }}>
-                Complete your order with secure payment and delivery details
-              </p>
-            </div>
-
-            <div className="text-center">
-              <div className="bg-[#27742d] text-white w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4 shadow-medium" style={{ fontFamily: 'Poppins, sans-serif' }}>
-                4
-              </div>
-              <h3 className="text-xl font-semibold text-[#1F1F1F] mb-2" style={{ fontFamily: 'Poppins, sans-serif' }}>Enjoy Food</h3>
-              <p className="text-[#4A4A4A]" style={{ fontFamily: 'Inter, sans-serif' }}>
-                Receive your delicious meal at your doorstep, hot and fresh
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Stats Section */}
-      <section className="py-16 bg-[#db1020] text-white">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-            <div>
-              <div className="text-4xl md:text-5xl font-bold mb-2" style={{ fontFamily: 'Poppins, sans-serif' }}>500+</div>
-              <div className="text-white/90" style={{ fontFamily: 'Inter, sans-serif' }}>Restaurants</div>
-            </div>
-            <div>
-              <div className="text-4xl md:text-5xl font-bold mb-2" style={{ fontFamily: 'Poppins, sans-serif' }}>50K+</div>
-              <div className="text-white/90" style={{ fontFamily: 'Inter, sans-serif' }}>Happy Customers</div>
-            </div>
-            <div>
-              <div className="text-4xl md:text-5xl font-bold mb-2" style={{ fontFamily: 'Poppins, sans-serif' }}>100K+</div>
-              <div className="text-white/90" style={{ fontFamily: 'Inter, sans-serif' }}>Orders Delivered</div>
-            </div>
-            <div>
-              <div className="text-4xl md:text-5xl font-bold mb-2" style={{ fontFamily: 'Poppins, sans-serif' }}>4.8</div>
-              <div className="text-white/90" style={{ fontFamily: 'Inter, sans-serif' }}>Average Rating</div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="py-16 bg-white">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-4xl font-bold text-[#1F1F1F] mb-4" style={{ fontFamily: 'Poppins, sans-serif' }}>
-            Ready to Order?
-          </h2>
-          <p className="text-xl text-[#4A4A4A] mb-8" style={{ fontFamily: 'Inter, sans-serif' }}>
-            Join thousands of satisfied customers and get your favorite food delivered today!
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link
-              to="/restaurants"
-              className="bg-[#db1020] text-white px-8 py-4 rounded-[16px] font-semibold text-lg hover:bg-[#c00e1d] transition duration-300 shadow-medium min-h-[44px] flex items-center justify-center"
-              style={{ fontFamily: 'Inter, sans-serif' }}
-            >
-              Start Ordering
-            </Link>
-            <Link
-              to="/signup"
-              className="bg-white text-[#db1020] px-8 py-4 rounded-[16px] font-semibold text-lg hover:bg-[#ffd700] hover:text-[#1F1F1F] transition duration-300 shadow-soft border-2 border-[#db1020] min-h-[44px] flex items-center justify-center"
-              style={{ fontFamily: 'Inter, sans-serif' }}
-            >
-              Create Account
             </Link>
           </div>
         </div>

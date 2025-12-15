@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
+import orderService from "../services/orderService.js";
 
 const TrackOrder = () => {
   const location = useLocation();
@@ -10,57 +11,59 @@ const TrackOrder = () => {
 
   // Auto-search if order number is provided via location state
   useEffect(() => {
-    if (location.state?.orderNumber) {
-      const orders = JSON.parse(localStorage.getItem("orders") || "[]");
-      const foundOrder = orders.find(o => o.orderNumber === location.state.orderNumber.trim().toUpperCase());
-      if (foundOrder) {
-        setOrder(foundOrder);
-        setSearchAttempted(true);
+    const loadOrder = async () => {
+      if (location.state?.orderNumber) {
+        try {
+          const response = await orderService.getOrder(location.state.orderNumber);
+          if (response.success) {
+            setOrder(response.data);
+            setSearchAttempted(true);
+          }
+        } catch (error) {
+          setError("Order not found");
+          setSearchAttempted(true);
+        }
       }
-    }
+    };
+    loadOrder();
   }, [location.state]);
 
   const getOrderStatus = (order) => {
     if (!order) return null;
     
-    const orderTime = new Date(order.timestamp);
-    const now = new Date();
-    const minutesElapsed = Math.floor((now - orderTime) / (1000 * 60));
+    const statusMap = {
+      'pending': { status: "pending", step: 0, message: "Order Pending" },
+      'confirmed': { status: "confirmed", step: 0, message: "Order Confirmed" },
+      'preparing': { status: "preparing", step: 1, message: "Preparing Your Order" },
+      'ready': { status: "ready", step: 2, message: "Order Ready for Pickup" },
+      'out_for_delivery': { status: "out_for_delivery", step: 3, message: "Out for Delivery" },
+      'delivered': { status: "delivered", step: 4, message: "Delivered" },
+      'cancelled': { status: "cancelled", step: -1, message: "Order Cancelled" }
+    };
     
-    // Simulate order progression based on time
-    if (minutesElapsed < 5) {
-      return { status: "confirmed", step: 0, message: "Order Confirmed" };
-    } else if (minutesElapsed < 15) {
-      return { status: "preparing", step: 1, message: "Preparing Your Order" };
-    } else if (minutesElapsed < 25) {
-      return { status: "ready", step: 2, message: "Order Ready for Pickup" };
-    } else if (minutesElapsed < 35) {
-      return { status: "out_for_delivery", step: 3, message: "Out for Delivery" };
-    } else {
-      return { status: "delivered", step: 4, message: "Delivered" };
-    }
+    return statusMap[order.status] || statusMap['pending'];
   };
 
-  const handleSearch = (e) => {
+  const handleSearch = async (e) => {
     e.preventDefault();
     setSearchAttempted(true);
     setError("");
+    setOrder(null);
     
     if (!orderNumber.trim()) {
       setError("Please enter an order number");
-      setOrder(null);
       return;
     }
 
-    // Get orders from localStorage
-    const orders = JSON.parse(localStorage.getItem("orders") || "[]");
-    const foundOrder = orders.find(o => o.orderNumber === orderNumber.trim().toUpperCase());
-    
-    if (foundOrder) {
-      setOrder(foundOrder);
-      setError("");
-    } else {
-      setOrder(null);
+    try {
+      const response = await orderService.getOrder(orderNumber.trim().toUpperCase());
+      if (response.success) {
+        setOrder(response.data);
+        setError("");
+      } else {
+        setError("Order not found. Please check your order number and try again.");
+      }
+    } catch (error) {
       setError("Order not found. Please check your order number and try again.");
     }
   };
@@ -76,7 +79,7 @@ const TrackOrder = () => {
   const orderStatus = order ? getOrderStatus(order) : null;
 
   return (
-    <div className="container mx-auto px-4 py-8 mt-20">
+    <div className="container mx-auto px-4 py-6">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12">
@@ -130,7 +133,7 @@ const TrackOrder = () => {
                     Order #{order.orderNumber}
                   </h2>
                   <p className="text-[#4A4A4A]" style={{ fontFamily: 'Inter, sans-serif' }}>
-                    Placed on {new Date(order.timestamp).toLocaleString()}
+                    Placed on {new Date(order.created_at).toLocaleString()}
                   </p>
                 </div>
                 <div className="bg-[#27742d] bg-opacity-10 border-2 border-[#27742d] rounded-[16px] px-6 py-3">
@@ -198,13 +201,13 @@ const TrackOrder = () => {
               <div className="mb-6">
                 <h3 className="text-xl font-semibold text-[#1F1F1F] mb-4" style={{ fontFamily: 'Poppins, sans-serif' }}>Order Items</h3>
                 <div className="space-y-3">
-                  {order.items.map((item, index) => (
+                  {order.items && order.items.map((item, index) => (
                     <div key={index} className="flex items-center gap-4 p-4 bg-[#f9f5f5] rounded-[16px]">
                       <div className="w-16 h-16 rounded-[12px] overflow-hidden bg-gray-100 flex-shrink-0">
-                        {item.image ? (
+                        {item.image_url ? (
                           <img
-                            src={item.image}
-                            alt={item.name}
+                            src={item.image_url}
+                            alt={item.item_name}
                             className="w-full h-full object-cover"
                             onError={(e) => {
                               e.target.src = "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=400&h=300&fit=crop";
@@ -218,15 +221,15 @@ const TrackOrder = () => {
                       </div>
                       <div className="flex-1">
                         <h4 className="font-semibold text-[#1F1F1F]" style={{ fontFamily: 'Poppins, sans-serif' }}>
-                          {item.name}
+                          {item.item_name}
                         </h4>
                         <p className="text-sm text-[#4A4A4A]" style={{ fontFamily: 'Inter, sans-serif' }}>
-                          Quantity: {item.quantity} × ${item.price.toFixed(2)}
+                          Quantity: {item.quantity} × ${parseFloat(item.price_at_time).toFixed(2)}
                         </p>
                       </div>
                       <div className="text-right">
                         <p className="font-bold text-[#db1020]" style={{ fontFamily: 'Poppins, sans-serif' }}>
-                          ${(item.price * item.quantity).toFixed(2)}
+                          ${(parseFloat(item.price_at_time) * item.quantity).toFixed(2)}
                         </p>
                       </div>
                     </div>
@@ -239,25 +242,25 @@ const TrackOrder = () => {
                 <div className="space-y-3">
                   <div className="flex justify-between text-[#4A4A4A]" style={{ fontFamily: 'Inter, sans-serif' }}>
                     <span>Subtotal</span>
-                    <span>${order.subtotal.toFixed(2)}</span>
+                    <span>${parseFloat(order.subtotal).toFixed(2)}</span>
                   </div>
                   {order.discount > 0 && (
                     <div className="flex justify-between text-[#27742d]" style={{ fontFamily: 'Inter, sans-serif' }}>
-                      <span>Discount ({order.promoCode})</span>
-                      <span>-${order.discount.toFixed(2)}</span>
+                      <span>Discount ({order.promo_code || 'Promo'})</span>
+                      <span>-${parseFloat(order.discount).toFixed(2)}</span>
                     </div>
                   )}
                   <div className="flex justify-between text-[#4A4A4A]" style={{ fontFamily: 'Inter, sans-serif' }}>
                     <span>Delivery Fee</span>
-                    <span>${order.deliveryFee.toFixed(2)}</span>
+                    <span>${parseFloat(order.delivery_fee).toFixed(2)}</span>
                   </div>
                   <div className="flex justify-between text-[#4A4A4A]" style={{ fontFamily: 'Inter, sans-serif' }}>
                     <span>Tax</span>
-                    <span>${order.tax.toFixed(2)}</span>
+                    <span>${parseFloat(order.tax).toFixed(2)}</span>
                   </div>
                   <div className="flex justify-between text-xl font-bold text-[#db1020] pt-3 border-t" style={{ fontFamily: 'Poppins, sans-serif' }}>
                     <span>Total</span>
-                    <span>${order.total.toFixed(2)}</span>
+                    <span>${parseFloat(order.total).toFixed(2)}</span>
                   </div>
                 </div>
               </div>

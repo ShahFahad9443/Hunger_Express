@@ -7,7 +7,7 @@ const OrderConfirmation = () => {
 
   if (!orderNumber) {
     return (
-      <div className="container mx-auto px-4 py-8 mt-20">
+      <div className="container mx-auto px-4 py-6">
         <div className="max-w-2xl mx-auto text-center">
           <h1 className="text-4xl font-bold text-[#db1020] mb-4" style={{ fontFamily: 'Poppins, sans-serif' }}>Order Not Found</h1>
           <p className="text-[#4A4A4A] mb-8" style={{ fontFamily: 'Inter, sans-serif' }}>No order information available.</p>
@@ -24,7 +24,7 @@ const OrderConfirmation = () => {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8 mt-20">
+    <div className="container mx-auto px-4 py-8">
       <div className="max-w-2xl mx-auto text-center">
         <div className="bg-[#27742d] bg-opacity-20 rounded-full w-24 h-24 flex items-center justify-center mx-auto mb-6">
           <span className="material-symbols-outlined text-[#27742d] text-5xl">check_circle</span>

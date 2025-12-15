@@ -6,19 +6,25 @@ const errorHandler = (err, req, res, next) => {
   // Log error for debugging
   console.error('Error:', err);
 
-  // Mongoose bad ObjectId
-  if (err.name === 'CastError') {
-    const message = 'Resource not found';
-    error = { message, statusCode: 404 };
-  }
-
-  // Mongoose duplicate key
-  if (err.code === 11000) {
+  // MySQL duplicate key error
+  if (err.code === 'ER_DUP_ENTRY') {
     const message = 'Duplicate field value entered';
     error = { message, statusCode: 400 };
   }
 
-  // Mongoose validation error
+  // MySQL foreign key constraint error
+  if (err.code === 'ER_NO_REFERENCED_ROW_2') {
+    const message = 'Referenced resource not found';
+    error = { message, statusCode: 400 };
+  }
+
+  // MySQL connection errors
+  if (err.code === 'ECONNREFUSED' || err.code === 'PROTOCOL_CONNECTION_LOST') {
+    const message = 'Database connection error';
+    error = { message, statusCode: 500 };
+  }
+
+  // Validation errors
   if (err.name === 'ValidationError') {
     const message = Object.values(err.errors).map(val => val.message).join(', ');
     error = { message, statusCode: 400 };

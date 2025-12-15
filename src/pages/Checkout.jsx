@@ -1,14 +1,8 @@
 import { useState } from "react";
 import { useCart } from "../context/CartContext";
 import { useNavigate } from "react-router-dom";
-
-// Promo codes database
-const PROMO_CODES = {
-  FIRST30: { discount: 30, type: "percentage", minOrder: 20 },
-  WEEKEND20: { discount: 20, type: "percentage", minOrder: 0 },
-  SAVE10: { discount: 10, type: "percentage", minOrder: 15 },
-  FLAT5: { discount: 5, type: "fixed", minOrder: 10 },
-};
+import orderService from "../services/orderService.js";
+import promoService from "../services/promoService.js";
 
 const Checkout = () => {
   const navigate = useNavigate();
@@ -16,6 +10,7 @@ const Checkout = () => {
   const [promoCode, setPromoCode] = useState("");
   const [appliedPromo, setAppliedPromo] = useState(null);
   const [promoError, setPromoError] = useState("");
+  const [submitError, setSubmitError] = useState("");
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -101,39 +96,25 @@ const Checkout = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (validateForm()) {
       setIsSubmitting(true);
-      // Simulate API call
-      setTimeout(() => {
-        const finalSubtotal = getTotalPrice();
-        const finalDiscount = calculateDiscount();
-        const deliveryFee = 2.99;
-        const finalTax = (finalSubtotal - finalDiscount) * 0.08;
-        const finalTotal = finalSubtotal - finalDiscount + deliveryFee + finalTax;
-        const orderNumber = `ORD-${Date.now()}`;
-        
-        // Save order to localStorage
-        const order = {
-          orderNumber,
-          timestamp: new Date().toISOString(),
-          items: cartItems.map(item => ({
-            id: item.id,
-            name: item.name,
-            description: item.description,
-            price: item.price,
-            quantity: item.quantity,
-            image: item.image,
-            restaurantId: item.restaurantId
-          })),
-          subtotal: finalSubtotal,
-          discount: finalDiscount,
-          deliveryFee,
-          tax: finalTax,
-          total: finalTotal,
-          promoCode: appliedPromo?.code || null,
-          deliveryInfo: {
+      setSubmitError("");
+
+      try {
+        const items = cartItems.map(item => ({
+          menu_item_id: item.id,
+          name: item.name,
+          price: item.price,
+          quantity: item.quantity
+        }));
+
+        const orderData = {
+          items,
+          promo_code: appliedPromo?.code || null,
+          payment_method: formData.paymentMethod,
+          delivery_info: {
             name: formData.fullName,
             email: formData.email,
             phone: formData.phone,
@@ -141,31 +122,34 @@ const Checkout = () => {
             city: formData.city,
             state: formData.state,
             zipCode: formData.zipCode
-          },
-          paymentMethod: formData.paymentMethod
+          }
         };
-        
-        // Get existing orders and add new one
-        const orders = JSON.parse(localStorage.getItem("orders") || "[]");
-        orders.unshift(order); // Add to beginning
-        localStorage.setItem("orders", JSON.stringify(orders));
-        
-        clearCart();
+
+        const response = await orderService.createOrder(orderData);
+
+        if (response.success) {
+          clearCart();
+          
+          navigate("/order-confirmation", {
+            state: {
+              orderNumber: response.data.order_number,
+              total: response.data.total,
+              discount: response.data.discount,
+              promoCode: appliedPromo?.code,
+            },
+          });
+        } else {
+          setSubmitError(response.error || "Failed to create order");
+          setIsSubmitting(false);
+        }
+      } catch (error) {
+        setSubmitError(error.message || "Failed to create order. Please try again.");
         setIsSubmitting(false);
-        
-        navigate("/order-confirmation", {
-          state: {
-            orderNumber,
-            total: finalTotal,
-            discount: finalDiscount,
-            promoCode: appliedPromo?.code,
-          },
-        });
-      }, 1500);
+      }
     }
   };
 
-  const handleApplyPromo = () => {
+  const handleApplyPromo = async () => {
     setPromoError("");
     const code = promoCode.toUpperCase().trim();
 
@@ -179,21 +163,24 @@ const Checkout = () => {
       return;
     }
 
-    const promo = PROMO_CODES[code];
-
-    if (!promo) {
-      setPromoError("Invalid promo code");
-      return;
+    try {
+      const subtotal = getTotalPrice();
+      const response = await promoService.validatePromoCode(code, subtotal);
+      
+      if (response.success) {
+        setAppliedPromo({
+          code: response.data.code,
+          discount: response.data.discount,
+          type: response.data.discount_type,
+          discount_value: response.data.discount_value
+        });
+        setPromoCode("");
+      } else {
+        setPromoError(response.error || "Invalid promo code");
+      }
+    } catch (error) {
+      setPromoError(error.message || "Failed to validate promo code");
     }
-
-    const subtotal = getTotalPrice();
-    if (subtotal < promo.minOrder) {
-      setPromoError(`Minimum order of $${promo.minOrder} required for this code`);
-      return;
-    }
-
-    setAppliedPromo({ code, ...promo });
-    setPromoCode("");
   };
 
   const handleRemovePromo = () => {
@@ -220,7 +207,7 @@ const Checkout = () => {
 
   if (cartItems.length === 0) {
     return (
-      <div className="container mx-auto px-4 py-8 mt-20">
+      <div className="container mx-auto px-4 py-6">
         <div className="max-w-2xl mx-auto text-center">
           <div className="text-6xl mb-6">🛒</div>
           <h1 className="text-4xl font-bold text-[#db1020] mb-4" style={{ fontFamily: 'Poppins, sans-serif' }}>Your Cart is Empty</h1>
@@ -240,7 +227,7 @@ const Checkout = () => {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8 mt-20">
+    <div className="container mx-auto px-4 py-8">
       <h1 className="text-4xl font-bold text-[#db1020] mb-8" style={{ fontFamily: 'Poppins, sans-serif' }}>Checkout</h1>
 
       <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -624,6 +611,12 @@ const Checkout = () => {
                 </div>
               </div>
             </div>
+
+            {submitError && (
+              <div className="mb-4 p-3 bg-red-50 border border-red-300 rounded-lg text-red-700 text-sm">
+                {submitError}
+              </div>
+            )}
 
             <button
               type="submit"

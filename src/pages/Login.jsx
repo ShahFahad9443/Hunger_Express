@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -21,7 +22,7 @@ const Login = () => {
     setError("");
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
 
@@ -32,17 +33,20 @@ const Login = () => {
 
     setIsSubmitting(true);
     
-    // Simulate API call
-    setTimeout(() => {
-      const result = login(formData.username, formData.password);
-      setIsSubmitting(false);
-
+    try {
+      // Try username first, then email
+      const result = await login(formData.username, formData.password);
+      
       if (result.success) {
         navigate("/");
       } else {
         setError(result.error || "Invalid credentials");
       }
-    }, 500);
+    } catch (err) {
+      setError(err.message || "Login failed. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleClose = () => {
@@ -109,16 +113,13 @@ const Login = () => {
           <button
             type="submit"
             disabled={isSubmitting}
-            className={`w-full bg-[#db1020] text-white py-3 rounded-[16px] font-semibold hover:bg-[#c00e1d] transition duration-300 shadow-medium min-h-[44px] ${
+            className={`w-full bg-[#db1020] text-white py-3 rounded-[16px] font-semibold hover:bg-[#c00e1d] transition duration-300 shadow-medium min-h-[44px] flex items-center justify-center ${
               isSubmitting ? "opacity-50 cursor-not-allowed" : ""
             }`}
             style={{ fontFamily: 'Inter, sans-serif' }}
           >
             {isSubmitting ? (
-              <span className="flex items-center justify-center gap-2">
-                <span className="material-symbols-outlined animate-spin">sync</span>
-                Logging in...
-              </span>
+              <LoadingSpinner size="sm" text="" />
             ) : (
               "Login"
             )}
