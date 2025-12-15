@@ -65,11 +65,34 @@ export const validateRestaurant = [
     .trim()
     .notEmpty()
     .withMessage('Cuisine type is required'),
+  body('description')
+    .optional()
+    .trim()
+    .isLength({ max: 500 })
+    .withMessage('Description must be less than 500 characters'),
   body('location')
+    .trim()
+    .notEmpty()
+    .withMessage('Location is required')
+    .isLength({ max: 100 })
+    .withMessage('Location must be less than 100 characters'),
+  body('image_url')
+    .optional()
+    .isURL()
+    .withMessage('Image URL must be a valid URL'),
+  body('hours')
     .optional()
     .trim()
     .isLength({ max: 100 })
-    .withMessage('Location must be less than 100 characters'),
+    .withMessage('Hours must be less than 100 characters'),
+  body('price_range')
+    .optional()
+    .isFloat({ min: 0 })
+    .withMessage('Price range must be a positive number'),
+  body('rating')
+    .optional()
+    .isFloat({ min: 0, max: 5 })
+    .withMessage('Rating must be between 0 and 5'),
   handleValidationErrors
 ];
 

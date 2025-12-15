@@ -23,6 +23,14 @@ import TrackOrder from "./pages/TrackOrder";
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
 import OrderConfirmation from "./pages/OrderConfirmation";
+import AdminLayout from "./pages/admin/AdminLayout";
+import AdminDashboard from "./pages/admin/AdminDashboard";
+import RestaurantsManagement from "./pages/admin/RestaurantsManagement";
+import MenuItemsManagement from "./pages/admin/MenuItemsManagement";
+import OrdersManagement from "./pages/admin/OrdersManagement";
+import UsersManagement from "./pages/admin/UsersManagement";
+import PromoCodesManagement from "./pages/admin/PromoCodesManagement";
+import RatingsManagement from "./pages/admin/RatingsManagement";
 
 // Get basename for GitHub Pages deployment
 const basename = import.meta.env.PROD ? "/Hunger_Express" : "";
@@ -56,6 +64,15 @@ const AppContent = () => {
         <Route path="/cart" element={<Cart />} />
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/order-confirmation" element={<OrderConfirmation />} />
+        <Route path="/admin" element={<AdminLayout />}>
+          <Route index element={<AdminDashboard />} />
+          <Route path="restaurants" element={<RestaurantsManagement />} />
+          <Route path="menu-items" element={<MenuItemsManagement />} />
+          <Route path="orders" element={<OrdersManagement />} />
+          <Route path="users" element={<UsersManagement />} />
+          <Route path="promo-codes" element={<PromoCodesManagement />} />
+          <Route path="ratings" element={<RatingsManagement />} />
+        </Route>
       </Routes>
       <Footer />
     </>

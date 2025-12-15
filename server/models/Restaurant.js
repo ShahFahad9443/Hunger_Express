@@ -3,8 +3,15 @@ import { getDB } from '../config/database.js';
 class Restaurant {
   static async findAll(filters = {}) {
     const db = getDB();
-    let query = 'SELECT * FROM restaurants WHERE is_active = TRUE';
+    let query = 'SELECT * FROM restaurants';
     const params = [];
+
+    // Only filter by is_active if includeInactive is not true
+    if (!filters.includeInactive) {
+      query += ' WHERE is_active = TRUE';
+    } else {
+      query += ' WHERE 1=1';
+    }
 
     if (filters.cuisine) {
       query += ' AND cuisine = ?';

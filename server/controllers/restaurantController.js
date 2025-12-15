@@ -9,7 +9,8 @@ export const getRestaurants = async (req, res, next) => {
     const filters = {
       cuisine: req.query.cuisine,
       location: req.query.location,
-      minRating: req.query.minRating ? parseFloat(req.query.minRating) : undefined
+      minRating: req.query.minRating ? parseFloat(req.query.minRating) : undefined,
+      includeInactive: req.query.includeInactive === 'true'
     };
 
     const restaurants = await Restaurant.findAll(filters);
@@ -76,6 +77,70 @@ export const getRestaurantMenu = async (req, res, next) => {
       success: true,
       count: menuItems.length,
       data: menuItems
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// @desc    Create restaurant (Admin only)
+// @route   POST /api/restaurants
+// @access  Private/Admin
+export const createRestaurant = async (req, res, next) => {
+  try {
+    const restaurant = await Restaurant.create(req.body);
+
+    res.status(201).json({
+      success: true,
+      data: restaurant
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// @desc    Update restaurant (Admin only)
+// @route   PUT /api/restaurants/:id
+// @access  Private/Admin
+export const updateRestaurant = async (req, res, next) => {
+  try {
+    const restaurant = await Restaurant.update(req.params.id, req.body);
+
+    if (!restaurant) {
+      return res.status(404).json({
+        success: false,
+        error: 'Restaurant not found'
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      data: restaurant
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// @desc    Delete restaurant (Admin only)
+// @route   DELETE /api/restaurants/:id
+// @access  Private/Admin
+export const deleteRestaurant = async (req, res, next) => {
+  try {
+    const restaurant = await Restaurant.findById(req.params.id);
+
+    if (!restaurant) {
+      return res.status(404).json({
+        success: false,
+        error: 'Restaurant not found'
+      });
+    }
+
+    await Restaurant.delete(req.params.id);
+
+    res.status(200).json({
+      success: true,
+      data: {}
     });
   } catch (error) {
     next(error);

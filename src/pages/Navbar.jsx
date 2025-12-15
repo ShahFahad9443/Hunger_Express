@@ -212,6 +212,20 @@ const Navbar = () => {
 
               {isAuthenticated ? (
                 <div className="flex items-center gap-3">
+                  {user?.role === 'admin' && (
+                    <Link
+                      to="/admin"
+                      className={`flex items-center justify-center px-3 py-2 rounded-[16px] transition-all duration-300 min-h-[44px] ${
+                        isActive("/admin")
+                          ? "bg-[#db1020] text-white shadow-medium"
+                          : "bg-white text-[#db1020] border border-[#db1020] hover:bg-[#ffd700] hover:text-[#1F1F1F]"
+                      }`}
+                      style={{ fontFamily: 'Inter, sans-serif' }}
+                      title="Admin Panel"
+                    >
+                      <span className="material-symbols-outlined">admin_panel_settings</span>
+                    </Link>
+                  )}
                   <div className="flex items-center gap-2 px-4 py-2 bg-[#ffd700] rounded-[16px] min-h-[44px] shadow-soft">
                     <span className="material-symbols-outlined text-[#db1020]">account_circle</span>
                     <span className="text-[#db1020] font-semibold" style={{ fontFamily: 'Inter, sans-serif' }}>{user?.name || user?.username}</span>
