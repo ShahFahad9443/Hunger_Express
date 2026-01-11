@@ -9,23 +9,23 @@ const Login = () => {
   return (
     <div className="min-h-screen flex justify-center items-center bg-gray-200">
       <div className="w-96 bg-white shadow-lg rounded-xl p-8">
-        <h2 className="text-2xl font-bold text-center text-pink-600 mb-6">
+        <h2 className="text-2xl font-bold text-center text-red-600 mb-6">
           Login
         </h2>
 
         <input
           type="email"
           placeholder="Email"
-          className="w-full p-3 mb-4 border rounded-lg focus:outline-none"
+          className="w-full p-3 mb-4 border rounded-lg focus:border-red-500 outline-none"
         />
 
         <input
           type="password"
           placeholder="Password"
-          className="w-full p-3 mb-4 border rounded-lg focus:outline-none"
+          className="w-full p-3 mb-4 border rounded-lg  focus:border-red-500 outline-none"
         />
 
-        <button className="w-full bg-pink-600 text-white py-3 rounded-lg mb-3 hover:bg-pink-700">
+        <button className="w-full bg-red-600 text-white py-3 rounded-lg mb-3 hover:bg-red-500">
           Login
         </button>
 

@@ -1,7 +1,10 @@
-import { Link } from "react-router-dom"; 
+import { Link } from "react-router-dom";
+import {
+  FaUtensils,
+} from "react-icons/fa";
 
 const Navbar = () => {
- 
+
   return (
     <>
       {/* NAVBAR */}
@@ -10,54 +13,48 @@ const Navbar = () => {
           <div className="flex items-center justify-between py-4">
             {/* Logo */}
             <div className="flex items-center space-x-2 cursor-pointer">
-            
-              <i className="fas fa-panda text-pink-600 text-3xl"></i>
-              <span className="text-2xl font-bold text-pink-600">
+              <FaUtensils className="text-red-600 text-3xl mr-2" />
+              <span className="text-2xl font-bold text-red-600">
                 Hunger Express
               </span>
             </div>
 
-            
             <nav className="hidden md:block">
               <ul className="flex items-center space-x-8">
-                <li>
-                  
-                  <Link
-                    to="/"
-                    className="text-pink-600 font-semibold hover:text-pink-700 transition duration-300 border-b-2 border-pink-600 pb-1"
-                  >
-                    Home
-                  </Link>
-                </li>
-              
-                <li>
-                  <a
-                    href="#"
-                    className="text-gray-700 hover:text-pink-600 transition"
-                  >
-                    Restaurants
-                  </a>
-                </li>
+                <Link
+                  to="/"
+                  className=" hover:text-red-500 transition duration-300 hover:border-b-2 border-red-600"
+                >
+                  Home
+                </Link>
+
+                <Link
+                  to="#"
+                  className=" hover:text-red-500 transition duration-300 hover:border-b-2 border-red-600"
+                >
+                  Restaurant
+                </Link>
+
                 <li>
                   <a
                     href="#"
-                    className="text-gray-700 hover:text-pink-600 transition"
+                    className="  hover:text-red-500 transition duration-300 hover:border-b-2 border-red-600"
                   >
                     Offers
                   </a>
                 </li>
                 <li>
                   <a
-                    href="#"
-                    className="text-gray-700 hover:text-pink-600 transition"
+                    href="/about"
+                    className=" hover:text-red-500 transition duration-300 hover:border-b-2 border-red-600"
                   >
                     About
                   </a>
                 </li>
                 <li>
                   <a
-                    href="#"
-                    className="text-gray-700 hover:text-pink-600 transition"
+                    href="/contect"
+                    className="t hover:text-red-500 transition duration-300 hover:border-b-2 border-red-600"
                   >
                     Contact
                   </a>
@@ -66,17 +63,17 @@ const Navbar = () => {
             </nav>
 
             <div className="flex items-center space-x-4">
-             
-              <Link 
-                to="/login"  
-                className="flex items-center px-4 py-2 border border-pink-600 text-pink-600 rounded-xl hover:bg-pink-50 transition"
+              
+              <Link
+                to="/login"
+                className="flex items-center px-4 py-2 border border-red-800 text-black-600 rounded-xl hover:bg-red-600 hover:text-white"
               >
-                <i className="fas fa-sign-in-alt mr-2"></i> Login
+                <i className=""></i> Login
               </Link>
 
               <Link
-                to= "/signup"
-                className="flex items-center px-4 py-2 bg-pink-600 text-white rounded-xl hover:bg-pink-700 transition shadow"
+                to="/signup"
+                className="flex items-center px-4 py-2 bg-red-600 text-white rounded-xl hover:bg-red-500"
               >
                 <i className="fas fa-user-plus mr-2"></i> Sign Up
               </Link>
@@ -84,9 +81,6 @@ const Navbar = () => {
           </div>
         </div>
       </div>
-
-   
-     
     </>
   );
 };
