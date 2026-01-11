@@ -174,6 +174,59 @@ This project uses Husky to run Git hooks automatically:
 
 The hooks are automatically set up when you run `npm install` (via the `prepare` script).
 
+## 🔔 Slack Integration
+
+This project includes Slack notifications for CI/CD pipeline failures. When any job in the CI pipeline fails, a notification will be sent to your configured Slack channel.
+
+### Setup Instructions
+
+1. **Create a Slack Incoming Webhook:**
+   - Go to [api.slack.com/apps](https://api.slack.com/apps)
+   - Click "Create New App" → "From scratch"
+   - Give your app a name (e.g., "Hunger Express CI") and select your workspace
+   - Go to "Incoming Webhooks" in the left sidebar
+   - Toggle "Activate Incoming Webhooks" to ON
+   - Click "Add New Webhook to Workspace"
+   - Select the channel where you want to receive notifications
+   - Click "Allow"
+   - Copy the Webhook URL (it will look like: `https://hooks.slack.com/services/YOUR/WEBHOOK/URL`)
+
+2. **Add Webhook URL to GitHub Secrets:**
+   - Go to your GitHub repository
+   - Navigate to **Settings** → **Secrets and variables** → **Actions**
+   - Click **New repository secret**
+   - Name: `SLACK_WEBHOOK_URL`
+   - Value: Paste your Slack webhook URL
+   - Click **Add secret**
+
+3. **Test the Integration:**
+   - The Slack notification will automatically trigger when any CI job fails
+   - You can test it by intentionally breaking a test or linting rule and pushing to a branch
+
+### Notification Details
+
+The Slack integration sends notifications for two events:
+
+#### 1. CI Pipeline Failures
+Triggered when any CI job fails (Lint, Build, Test, or Deploy). Includes:
+- Repository name and branch
+- Workflow name
+- Actor (who triggered the workflow)
+- List of failed jobs
+- Direct link to view the workflow run in GitHub Actions
+
+#### 2. PR Merge Success
+Triggered when a pull request is successfully merged. Includes:
+- Repository name
+- PR number and title
+- PR author
+- Source and target branches
+- Direct link to the merged PR
+
+**Note:** 
+- CI failure notifications are only sent on push and pull request events, and only when jobs fail
+- PR merge notifications are sent automatically when a PR is merged to any branch
+
 ## 📋 Pull Request Template
 
 This project uses a PR template to ensure consistent and comprehensive pull requests. When creating a PR on GitHub, the template will automatically populate with sections for:

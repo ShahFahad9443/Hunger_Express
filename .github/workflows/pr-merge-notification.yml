@@ -1,0 +1,67 @@
+name: PR Merge Notification
+
+on:
+  pull_request:
+    types: [closed]
+
+jobs:
+  notify-slack:
+    name: Notify Slack on PR Merge
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.merged == true
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Send Slack notification
+        run: |
+          PR_TITLE="${{ github.event.pull_request.title }}"
+          PR_AUTHOR="${{ github.event.pull_request.user.login }}"
+          PR_NUMBER="${{ github.event.pull_request.number }}"
+          PR_BRANCH="${{ github.event.pull_request.head.ref }}"
+          BASE_BRANCH="${{ github.event.pull_request.base.ref }}"
+          PR_URL="${{ github.event.pull_request.html_url }}"
+          
+          cat <<EOF | curl -X POST -H 'Content-type: application/json' -d @- "${{ secrets.SLACK_WEBHOOK_URL }}"
+          {
+            "text": "✅ PR Merged - ${{ github.repository }}",
+            "blocks": [
+              {
+                "type": "header",
+                "text": {
+                  "type": "plain_text",
+                  "text": "✅ PR Successfully Merged"
+                }
+              },
+              {
+                "type": "section",
+                "fields": [
+                  {
+                    "type": "mrkdwn",
+                    "text": "*Repository:*\n${{ github.repository }}"
+                  },
+                  {
+                    "type": "mrkdwn",
+                    "text": "*PR #${PR_NUMBER}*\n<${PR_URL}|${PR_TITLE}>"
+                  },
+                  {
+                    "type": "mrkdwn",
+                    "text": "*Author:*\n${PR_AUTHOR}"
+                  },
+                  {
+                    "type": "mrkdwn",
+                    "text": "*Merged:*\n${PR_BRANCH} → ${BASE_BRANCH}"
+                  }
+                ]
+              },
+              {
+                "type": "section",
+                "text": {
+                  "type": "mrkdwn",
+                  "text": "<${PR_URL}|🔍 View Pull Request>"
+                }
+              }
+            ]
+          }
+          EOF
+

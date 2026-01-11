@@ -203,3 +203,85 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@v4
 
+  notify-slack:
+    name: Notify Slack on Failure
+    runs-on: ubuntu-latest
+    needs: [lint, build, test, deploy]
+    if: always() && (needs.lint.result == 'failure' || needs.build.result == 'failure' || needs.test.result == 'failure' || (needs.deploy.result == 'failure' && needs.deploy.result != 'skipped'))
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Determine failed jobs
+        id: failed-jobs
+        run: |
+          FAILED_JOBS=""
+          if [ "${{ needs.lint.result }}" == "failure" ]; then
+            FAILED_JOBS="${FAILED_JOBS}• Lint\n"
+          fi
+          if [ "${{ needs.build.result }}" == "failure" ]; then
+            FAILED_JOBS="${FAILED_JOBS}• Build\n"
+          fi
+          if [ "${{ needs.test.result }}" == "failure" ]; then
+            FAILED_JOBS="${FAILED_JOBS}• Test\n"
+          fi
+          if [ "${{ needs.deploy.result }}" == "failure" ]; then
+            FAILED_JOBS="${FAILED_JOBS}• Deploy\n"
+          fi
+          echo "failed_jobs<<EOF" >> $GITHUB_OUTPUT
+          echo -e "$FAILED_JOBS" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Send Slack notification
+        run: |
+          FAILED_JOBS_TEXT="${{ steps.failed-jobs.outputs.failed_jobs }}"
+          cat <<EOF | curl -X POST -H 'Content-type: application/json' -d @- "${{ secrets.SLACK_WEBHOOK_URL }}"
+          {
+            "text": "❌ CI Pipeline Failed - ${{ github.repository }}",
+            "blocks": [
+              {
+                "type": "header",
+                "text": {
+                  "type": "plain_text",
+                  "text": "❌ CI Pipeline Failed"
+                }
+              },
+              {
+                "type": "section",
+                "fields": [
+                  {
+                    "type": "mrkdwn",
+                    "text": "*Repository:*\n${{ github.repository }}"
+                  },
+                  {
+                    "type": "mrkdwn",
+                    "text": "*Branch:*\n${{ github.ref_name }}"
+                  },
+                  {
+                    "type": "mrkdwn",
+                    "text": "*Workflow:*\n${{ github.workflow }}"
+                  },
+                  {
+                    "type": "mrkdwn",
+                    "text": "*Actor:*\n${{ github.actor }}"
+                  }
+                ]
+              },
+              {
+                "type": "section",
+                "text": {
+                  "type": "mrkdwn",
+                  "text": "*Failed Jobs:*\n${FAILED_JOBS_TEXT}"
+                }
+              },
+              {
+                "type": "section",
+                "text": {
+                  "type": "mrkdwn",
+                  "text": "<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|🔍 View Workflow Run>"
+                }
+              }
+            ]
+          }
+          EOF
+
